@@ -1,26 +1,211 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #07070a;
+  --bg-2: #0e0e13;
+  --ink: #ecebe6;
+  --muted: #8b8b95;
+  --line: rgba(236, 235, 230, 0.1);
+  --cyan: #4cc3ff;
+  --violet: #b69cff;
+  --accent: linear-gradient(100deg, var(--cyan), var(--violet));
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-cyan: var(--cyan);
+  --color-violet: var(--violet);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Element defaults live in the base layer so Tailwind utilities can override them. */
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-body), system-ui, sans-serif;
+    background: var(--bg);
+    overflow-x: clip;
+  }
+
+  html.is-loading,
+  html.is-loading body {
+    overflow: hidden;
+  }
+
+  ::selection {
+    background: var(--cyan);
+    color: var(--bg);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 4px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .font-display {
+    font-family: var(--font-display), sans-serif;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono), monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .text-gradient {
+    background: var(--accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .text-gradient-char {
+    background: var(--accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* ---------- film grain ---------- */
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation: grain 1.2s steps(6) infinite;
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -1%); }
+  80% { transform: translate(3%, 3%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ---------- custom cursor ---------- */
+.has-cursor,
+.has-cursor * {
+  cursor: none !important;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 80;
+  pointer-events: none;
+  border-radius: 999px;
+  mix-blend-mode: difference;
+  opacity: 0;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  background: #fff;
+}
+
+.cursor-ring {
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  display: grid;
+  place-items: center;
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1), height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    margin 0.35s cubic-bezier(0.22, 1, 0.36, 1), background 0.35s, border-color 0.35s;
+}
+
+.cursor-ring span {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #000;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.cursor-ring.is-active {
+  width: 96px;
+  height: 96px;
+  margin: -48px 0 0 -48px;
+  background: #fff;
+  border-color: #fff;
+}
+
+.cursor-ring.is-active span {
+  opacity: 1;
+}
+
+.cursor-ring.is-link {
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+}
+
+/* ---------- split text helpers ---------- */
+.line-mask {
+  overflow: hidden;
+  display: block;
+  padding-bottom: 0.06em;
+}
+
+.reveal-word {
+  display: inline-block;
+}
+
+/* ---------- hero fallback (no GPU): a CSS glass orb over the name ---------- */
+.hero-orb {
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.4), rgba(76, 195, 255, 0.14) 38%, rgba(182, 156, 255, 0.2) 68%, rgba(182, 156, 255, 0.05) 72%);
+  box-shadow: inset 0 0 60px rgba(182, 156, 255, 0.4), inset -20px -30px 80px rgba(76, 195, 255, 0.35), 0 0 140px rgba(76, 195, 255, 0.25);
+  backdrop-filter: blur(10px) saturate(1.7);
+  -webkit-backdrop-filter: blur(10px) saturate(1.7);
+  animation: orb 9s ease-in-out infinite;
+}
+
+@keyframes orb {
+  0%, 100% { transform: translate(-3%, 2%) rotate(0deg); }
+  50% { transform: translate(3%, -3%) rotate(12deg); }
+}
+
+/* ---------- marquee ---------- */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain {
+    animation: none;
+  }
 }

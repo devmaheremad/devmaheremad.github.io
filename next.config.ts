@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
+// Static export: the whole site is plain HTML/CSS/JS, so it can be hosted for free (GitHub Pages or Netlify).
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  output: "export",
+  images: { unoptimized: true },
   turbopack: {
     rules: {
       "*.css": {
