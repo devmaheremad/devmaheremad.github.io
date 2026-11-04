@@ -6,6 +6,7 @@ import { profile } from "@/content/site";
 
 const LINKS = [
   { id: "work", label: "Work" },
+  { id: "case-studies", label: "Cases" },
   { id: "experience", label: "Experience" },
   { id: "contact", label: "Contact" },
 ];
@@ -44,12 +45,12 @@ export default function Nav() {
           </span>
           Available now · Palestine {time}
         </div>
-        <ul className="flex items-center gap-5 sm:gap-8">
+        <ul className="flex items-center gap-3.5 sm:gap-8">
           {LINKS.map((l) => (
             <li key={l.id}>
               <button
                 onClick={() => scrollToId(l.id)}
-                className="group relative font-mono text-[0.72rem] uppercase tracking-[0.18em]"
+                className="group relative font-mono text-[0.68rem] uppercase tracking-[0.1em] sm:text-[0.72rem] sm:tracking-[0.18em]"
               >
                 {l.label}
                 <span className="absolute -bottom-1 left-0 h-px w-full origin-right scale-x-0 bg-ink transition-transform duration-500 group-hover:origin-left group-hover:scale-x-100" />

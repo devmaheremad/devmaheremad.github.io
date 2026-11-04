@@ -30,7 +30,7 @@ export default function Experience() {
 
   return (
     <section ref={root} id="experience" className="px-5 py-[16vh] sm:px-10">
-      <p className="eyebrow mb-6">( 04 ) — Experience</p>
+      <p className="eyebrow mb-6">( 05 ) — Experience</p>
       <h2 className="mb-16 font-display text-[clamp(3rem,9vw,9rem)] font-extrabold leading-[0.85] tracking-tighter">
         Where I&apos;ve <span className="text-gradient">shipped.</span>
       </h2>

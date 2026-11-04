@@ -35,7 +35,7 @@ export default function Contact() {
   return (
     <footer ref={root} id="contact" className="relative overflow-hidden px-5 pb-10 pt-[18vh] sm:px-10">
       <div className="pointer-events-none absolute -bottom-1/2 left-1/2 h-[90vh] w-[90vh] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(76,195,255,.22),rgba(182,156,255,.12)_40%,transparent_70%)] blur-2xl" />
-      <p className="ct-in eyebrow mb-8">( 05 ) — Contact</p>
+      <p className="ct-in eyebrow mb-8">( 06 ) — Contact</p>
       <h2 className="ct-title font-display text-[clamp(3.2rem,11vw,11.5rem)] font-extrabold leading-[0.88] tracking-tighter">
         Let&apos;s make it
         <br />

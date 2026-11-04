@@ -183,6 +183,53 @@ export const experience = [
   },
 ];
 
+// Case studies: CV facts + the owner's confirmed story bank (Career-Content-Bot kit/case-studies.md, approved 2026-11-05).
+// Results stay in words: no numbers beyond the CV.
+export const caseStudies = [
+  {
+    slug: "lighthouse",
+    title: "From about 55% to 95%+ on Lighthouse",
+    outcome: "An application's Lighthouse performance went from about 55% to 95%+.",
+    context: "The Sailors, a Saudi company building booking and e-commerce products. Senior Frontend Developer, remote.",
+    challenge: "The application scored about 55% on Lighthouse performance.",
+    did: [
+      "Found three causes: unoptimized images, a large JavaScript bundle (whole icon packages imported at once) and render-blocking fonts.",
+      "Fixed the imports, split the routes, sized the images and changed font loading: rendering optimization, code splitting, caching strategies, media and asset optimization.",
+      "On the storefronts, Lighthouse ran before merging, not after launch, so new features couldn't quietly pull scores down.",
+    ],
+    result: "About 55% to 95%+ on performance. Storefronts shipped with 95%+ across performance, accessibility, SEO, best practices and PWA readiness.",
+    stack: ["React", "TypeScript", "Material UI", "Lighthouse", "PWA", "SEO"],
+  },
+  {
+    slug: "world-cup",
+    title: "A FIFA World Cup Qatar 2022 ticket-booking launch",
+    outcome: "A high-traffic booking experience that supported about $20,000 in revenue per match event.",
+    context: "The Sailors needed World Cup ticket booking under a highly constrained timeline.",
+    challenge: "High traffic, a booking flow customers could trust, and very little time.",
+    did: [
+      "Proposed building the experience inside the company's existing platform instead of a separate website, which reduced the implementation scope.",
+      "Built and launched it with React, TypeScript and Material UI.",
+      "Traffic spiked whenever match tickets opened, so the booking path stayed minimal, match information was cached and the heavy parts loaded lazily.",
+    ],
+    result: "Booking stayed usable during the peaks, and the experience supported about $20,000 in revenue per match event.",
+    stack: ["React", "TypeScript", "Material UI"],
+  },
+  {
+    slug: "nextjs",
+    title: "Choosing Next.js for a multi-store SaaS platform",
+    outcome: "A written technical comparison that supported the team's decision to build on Next.js.",
+    context: "Konin Cloud's KoninPay: a multi-store SaaS platform with merchant and store creation, payment workflows and a digital wallet. Senior Frontend Developer, remote.",
+    challenge: "The initial plan was HTML, Sass and Blade, for a product that had to scale and keep evolving.",
+    did: [
+      "Advocated Next.js, focusing on scalability, maintainability, development efficiency and long-term product evolution.",
+      "Wrote a technical comparison of both approaches: architecture, advantages, trade-offs and maintainability.",
+      "Part of the case was SEO: storefront product pages needed proper titles and link previews, and with Next.js they render on the server with their own metadata.",
+    ],
+    result: "The comparison supported the team's technology decision. Product pages became shareable and indexable, and seven live storefronts run on the platform today.",
+    stack: ["React", "Next.js", "TypeScript", "Material UI", "REST APIs", "React Testing Library"],
+  },
+];
+
 export const stack = [
   "React", "Next.js", "TypeScript", "JavaScript", "Redux Toolkit", "Zustand", "Material UI", "Tailwind CSS", "Sass",
   "React Testing Library", "Core Web Vitals", "Lighthouse", "Accessibility (WCAG)", "PWA", "SEO", "REST APIs", "Git", "Figma",
