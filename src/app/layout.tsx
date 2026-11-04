@@ -12,13 +12,17 @@ const body = Inter_Tight({ variable: "--font-body", subsets: ["latin"] });
 const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://devmaheremad.github.io"),
   title: `${profile.name} — ${profile.role}`,
   description: profile.intro,
   authors: [{ name: profile.name }],
+  alternates: { canonical: "/" },
   openGraph: {
     title: `${profile.name} — ${profile.role}`,
     description: profile.intro,
     type: "website",
+    url: "/",
+    siteName: profile.name,
   },
   twitter: { card: "summary_large_image", creator: "@devmaheremad" },
 };
