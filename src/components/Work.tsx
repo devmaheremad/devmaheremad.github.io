@@ -2,31 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/motion";
-import { projects, type Project } from "@/content/site";
+import { workGroups, type Project } from "@/content/site";
+
+const projects = workGroups.flatMap((g) => g.items);
 
 function Visual({ p, className = "", eager = false }: { p: Project; className?: string; eager?: boolean }) {
-  if (p.image) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={p.image}
-        alt={eager ? "" : `${p.title} screenshot`}
-        loading={eager ? "eager" : "lazy"}
-        decoding="async"
-        className={`h-full w-full object-cover object-top ${className}`}
-      />
-    );
-  }
   return (
-    <div className={`relative flex h-full w-full items-end p-6 ${className}`} style={{ background: p.art }}>
-      <span className="font-display text-[clamp(2rem,4vw,3.6rem)] font-extrabold leading-none text-white/90 mix-blend-overlay">
-        {p.title}
-      </span>
-    </div>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={p.image}
+      alt={eager ? "" : `${p.title} screenshot`}
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+      className={`h-full w-full object-cover object-top ${className}`}
+    />
   );
 }
 
-// Big rows; on desktop a preview card follows the cursor and swaps per project.
+// Business websites and side projects, grouped and ordered like the Linktree. On desktop a preview card follows the cursor.
 export default function Work() {
   const root = useRef<HTMLElement>(null);
   const preview = useRef<HTMLDivElement>(null);
@@ -83,69 +76,63 @@ export default function Work() {
   }, [current]);
 
   return (
-    <section ref={root} id="work" className="relative px-5 py-[16vh] sm:px-10">
+    <section ref={root} id="projects" className="relative px-5 py-[16vh] sm:px-10">
       <div className="mb-14 flex items-end justify-between gap-6">
         <div>
-          <p className="eyebrow mb-6">( 02 ) — Selected work</p>
+          <p className="eyebrow mb-6">( 03 ) — More work</p>
           <h2 className="font-display text-[clamp(3rem,9vw,9rem)] font-extrabold leading-[0.85] tracking-tighter">
-            Work<span className="text-gradient">.</span>
+            Projects<span className="text-gradient">.</span>
           </h2>
         </div>
-        <p className="eyebrow hidden max-w-[28ch] text-right md:block">
-          SaaS, e-commerce and booking products. Live links where the project is public.
-        </p>
+        <p className="eyebrow hidden max-w-[28ch] text-right md:block">Business websites and side projects. Every one is live.</p>
       </div>
 
-      <ul onPointerLeave={() => setCurrent(null)} className="border-t border-line">
-        {projects.map((p, i) => {
-          const inner = (
-            <>
-              <div className="flex items-baseline gap-4 sm:gap-8">
-                <span className="wk-in eyebrow w-8 shrink-0">{String(i + 1).padStart(2, "0")}</span>
-                <div className="min-w-0 flex-1 overflow-hidden">
-                  <h3 className="font-display text-[clamp(1.8rem,4.2vw,4.2rem)] font-extrabold leading-[1] tracking-tight transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-4">
-                    <span className="wk-in block">{p.title}</span>
-                  </h3>
-                </div>
-                <span className="wk-in hidden text-right text-sm text-muted md:block md:w-56">
-                  {p.kind}
-                  <br />
-                  {p.client} · {p.year}
-                </span>
-                <span className="hidden w-10 text-right text-2xl transition-transform duration-500 group-hover:-rotate-45 sm:block">
-                  <span className="wk-in inline-block">{p.href ? "→" : ""}</span>
-                </span>
-              </div>
-              <div className="mt-4 grid gap-4 pl-12 sm:pl-16 md:hidden">
-                <div className="aspect-[16/10] overflow-hidden rounded-xl border border-line">
-                  <Visual p={p} />
-                </div>
-              </div>
-              <div className="mt-3 flex flex-wrap gap-2 pl-12 sm:pl-16">
-                {p.stack.map((s) => (
-                  <span key={s} className="rounded-full border border-line px-3 py-1 font-mono text-[0.68rem] uppercase tracking-wider text-muted">
-                    {s}
-                  </span>
-                ))}
-              </div>
-              <p className="mt-3 max-w-[70ch] pl-12 text-[0.95rem] leading-relaxed text-ink/70 sm:pl-16">{p.summary}</p>
-            </>
-          );
-          return (
-            <li key={p.slug} onPointerEnter={() => setCurrent(i)} className="wk-row group border-b border-line">
-              {p.href ? (
-                <a href={p.href} target="_blank" rel="noopener noreferrer" data-cursor="Open" className="block py-8 sm:py-10">
-                  {inner}
-                </a>
-              ) : (
-                <div data-cursor="View" className="block py-8 sm:py-10">
-                  {inner}
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+      <div onPointerLeave={() => setCurrent(null)} className="space-y-20">
+        {workGroups.map((group) => (
+          <div key={group.title}>
+            <div className="mb-2 flex items-baseline justify-between">
+              <h3 className="font-display text-2xl font-bold">{group.title}</h3>
+              <span className="eyebrow">{String(group.items.length).padStart(2, "0")} projects</span>
+            </div>
+            <ul className="border-t border-line">
+              {group.items.map((p) => {
+                const i = projects.indexOf(p);
+                return (
+                  <li key={p.slug} onPointerEnter={() => setCurrent(i)} className="wk-row group border-b border-line">
+                    <a href={p.href} target="_blank" rel="noopener noreferrer" data-cursor="Open" className="block py-8 sm:py-10">
+                      <div className="flex items-baseline gap-4 sm:gap-8">
+                        <span className="wk-in eyebrow w-8 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                        <div className="min-w-0 flex-1 overflow-hidden">
+                          <h4 className="font-display text-[clamp(1.8rem,4.2vw,4.2rem)] font-extrabold leading-[1] tracking-tight transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-4">
+                            <span className="wk-in block">{p.title}</span>
+                          </h4>
+                        </div>
+                        <span className="wk-in hidden text-right text-sm text-muted md:block md:w-56">{p.kind}</span>
+                        <span className="hidden w-10 text-right text-2xl transition-transform duration-500 group-hover:-rotate-45 sm:block">
+                          <span className="wk-in inline-block">→</span>
+                        </span>
+                      </div>
+                      <div className="mt-4 grid gap-4 pl-12 sm:pl-16 md:hidden">
+                        <div className="aspect-[16/10] overflow-hidden rounded-xl border border-line">
+                          <Visual p={p} />
+                        </div>
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-2 pl-12 sm:pl-16">
+                        {p.stack.map((s) => (
+                          <span key={s} className="rounded-full border border-line px-3 py-1 font-mono text-[0.68rem] uppercase tracking-wider text-muted">
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="mt-3 max-w-[70ch] pl-12 text-[0.95rem] leading-relaxed text-ink/70 sm:pl-16">{p.summary}</p>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </div>
 
       <div
         ref={preview}

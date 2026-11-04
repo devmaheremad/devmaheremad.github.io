@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/motion";
 import { storefronts } from "@/content/site";
 
-// Pinned horizontal gallery: vertical scroll moves the six KoninPay storefronts sideways.
+// Pinned horizontal gallery: vertical scroll moves the KoninPay storefronts sideways (first work group, as on the Linktree).
 export default function Storefronts() {
   const root = useRef<HTMLElement>(null);
   const pinned = useRef<HTMLDivElement>(null);
@@ -39,13 +39,13 @@ export default function Storefronts() {
 
   return (
     // GSAP wraps the pinned element in a spacer; pinning an inner div keeps React's own section untouched.
-    <section ref={root} className="relative">
+    <section ref={root} id="work" className="relative">
       <div ref={pinned} className="relative overflow-hidden py-24 md:flex md:h-[100svh] md:items-center md:py-0">
       <div ref={track} className="flex flex-col gap-10 px-5 md:flex-row md:items-center md:gap-14 md:px-10">
         <div className="shrink-0 md:w-[34vw]">
-          <p className="eyebrow mb-6">( 03 ) — KoninPay · Konin Cloud</p>
+          <p className="eyebrow mb-6">( 02 ) — Work · KoninPay SaaS stores</p>
           <h2 className="font-display text-[clamp(2.6rem,5vw,5rem)] font-extrabold leading-[0.95] tracking-tight">
-            Six storefronts.
+            Seven storefronts.
             <br />
             <span className="text-gradient">One SaaS platform.</span>
           </h2>
@@ -75,7 +75,7 @@ export default function Storefronts() {
             </div>
             <div className="mt-4 flex items-baseline justify-between">
               <span className="font-display text-xl font-bold">{s.name}</span>
-              <span className="eyebrow">0{i + 1} / 06 ↗</span>
+              <span className="eyebrow">0{i + 1} / 0{storefronts.length} ↗</span>
             </div>
           </a>
         ))}

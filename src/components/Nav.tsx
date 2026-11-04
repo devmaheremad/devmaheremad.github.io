@@ -42,7 +42,7 @@ export default function Nav() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
           </span>
-          Available now · Gaza {time}
+          Available now · Palestine {time}
         </div>
         <ul className="flex items-center gap-5 sm:gap-8">
           {LINKS.map((l) => (

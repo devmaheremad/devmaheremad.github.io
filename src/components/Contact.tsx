@@ -57,12 +57,13 @@ export default function Contact() {
             </a>
             <a
               href={profile.cv}
-              download
+              target="_blank"
+              rel="noopener noreferrer"
               data-magnetic
               data-cursor="CV"
               className="rounded-full border border-line px-7 py-4 font-medium transition-colors hover:border-ink"
             >
-              Download CV ↓
+              View CV ↗
             </a>
           </div>
         </div>

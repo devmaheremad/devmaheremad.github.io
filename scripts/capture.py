@@ -1,7 +1,7 @@
 """Capture screenshots of the live projects with headless Edge and save them as WebP in public/work/.
 
   python scripts/capture.py            # all
-  python scripts/capture.py tuby nearby
+  python scripts/capture.py tuby gosto
 
 Edge's launcher returns before the headless browser has written the screenshot, so the script waits for the file.
 """
@@ -26,6 +26,7 @@ SHOTS = {
     "konin-food": "https://foodstore.koninstore.com/en",
     "konin-fashion": "https://fashion.koninstore.com/en",
     "konin-glammart": "https://glammart.koninstore.com/en",
+    "konin-gearup": "https://gearup.koninstore.com/en",
     "konin-pastries": "https://pastryshop.koninstore.com/en",
     "coffee-talk": "https://devmaheremad.github.io/coffeetalkdash/home",
     "mars": "https://devmaheremad.github.io/Mars-master/",
@@ -34,7 +35,7 @@ SHOTS = {
     "laqta": "https://devmaheremad.github.io/laqtasiteloader/",
     "hilarity": "https://hilarity-hq.vercel.app/",
     "tuby": "https://devmaheremad.github.io/tuby/",
-    "nearby": "https://devmaheremad.github.io/nearby/",
+    "gosto": "https://devmaheremad.github.io/gosto-ecommerce/",
 }
 
 
