@@ -11,7 +11,7 @@ export const profile = {
   availability: "Available now · Remote, hybrid or on-site · Open to relocation",
   intro:
     "I build fast, accessible React and Next.js frontends for SaaS, e-commerce and booking products. 5+ years, remote.",
-  email: "mashmaher96@gmail.com",
+  email: "hello@devmaheremad.com",
   cv: "https://drive.google.com/file/d/1IhayT82PmWktlbuYtWAnDIVpJUIxjxmg/view?usp=sharing",
   links: [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/devmaheremad" },
