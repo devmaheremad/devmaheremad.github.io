@@ -64,7 +64,7 @@ export const workGroups: { title: string; items: Project[] }[] = [
         stack: ["JavaScript", "Bootstrap", "Chart.js"],
         summary: "A dashboard experience for a hospitality business.",
         image: "/work/coffee-talk.webp",
-        href: "https://devmaheremad.github.io/coffeetalkdash/home",
+        href: "https://devmaheremad.com/coffeetalkdash/home",
       },
       {
         slug: "dhahran",
@@ -73,7 +73,7 @@ export const workGroups: { title: string; items: Project[] }[] = [
         stack: ["HTML", "Sass", "JavaScript"],
         summary: "A website for students and graduates to present their services and experience, and to offer courses and lessons.",
         image: "/work/dahran.webp",
-        href: "https://devmaheremad.github.io/aldahran",
+        href: "https://devmaheremad.com/aldahran",
       },
       {
         slug: "ajad",
@@ -82,7 +82,7 @@ export const workGroups: { title: string; items: Project[] }[] = [
         stack: ["HTML", "Sass", "JavaScript"],
         summary: "A modern landing page presenting the company's vision, objectives, services and contact details.",
         image: "/work/ajad.webp",
-        href: "https://devmaheremad.github.io/ajad",
+        href: "https://devmaheremad.com/ajad",
       },
       {
         slug: "mars",
@@ -91,7 +91,7 @@ export const workGroups: { title: string; items: Project[] }[] = [
         stack: ["HTML", "Sass", "JavaScript"],
         summary: "The company website, presenting its services in a creative, modern layout.",
         image: "/work/mars.webp",
-        href: "https://devmaheremad.github.io/Mars-master",
+        href: "https://devmaheremad.com/Mars-master",
       },
     ],
   },
@@ -123,7 +123,7 @@ export const workGroups: { title: string; items: Project[] }[] = [
         stack: ["HTML", "Sass", "JavaScript"],
         summary: "A multi-section company website with several themes that visitors can switch between.",
         image: "/work/laqta.webp",
-        href: "https://devmaheremad.github.io/laqtasiteloader",
+        href: "https://devmaheremad.com/laqtasiteloader",
       },
       {
         slug: "gosto",
@@ -132,7 +132,7 @@ export const workGroups: { title: string; items: Project[] }[] = [
         stack: ["React", "TypeScript", "Material UI", "Swiper"],
         summary: "An e-commerce store for selling website templates and graphics.",
         image: "/work/gosto.webp",
-        href: "https://devmaheremad.github.io/gosto-ecommerce/",
+        href: "https://devmaheremad.com/gosto-ecommerce/",
       },
     ],
   },

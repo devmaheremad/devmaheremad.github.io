@@ -1,6 +1,6 @@
 # Maher Almashharawi — Portfolio
 
-**Live:** https://devmaheremad.github.io
+**Live:** https://devmaheremad.com
 
 Personal site of a Senior Frontend Engineer (React, Next.js, TypeScript). A static Next.js export with a WebGL hero,
 smooth scrolling and scroll-driven animation, kept fast: Lighthouse 90+ performance and 100 accessibility, best practices and SEO.

@@ -12,7 +12,7 @@ const body = Inter_Tight({ variable: "--font-body", subsets: ["latin"] });
 const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://devmaheremad.github.io"),
+  metadataBase: new URL("https://devmaheremad.com"),
   title: `${profile.name} — ${profile.role}`,
   description: profile.intro,
   authors: [{ name: profile.name }],

@@ -28,14 +28,14 @@ SHOTS = {
     "konin-glammart": "https://glammart.koninstore.com/en",
     "konin-gearup": "https://gearup.koninstore.com/en",
     "konin-pastries": "https://pastryshop.koninstore.com/en",
-    "coffee-talk": "https://devmaheremad.github.io/coffeetalkdash/home",
-    "mars": "https://devmaheremad.github.io/Mars-master/",
-    "dahran": "https://devmaheremad.github.io/aldahran/",
-    "ajad": "https://devmaheremad.github.io/ajad/",
-    "laqta": "https://devmaheremad.github.io/laqtasiteloader/",
+    "coffee-talk": "https://devmaheremad.com/coffeetalkdash/home",
+    "mars": "https://devmaheremad.com/Mars-master/",
+    "dahran": "https://devmaheremad.com/aldahran/",
+    "ajad": "https://devmaheremad.com/ajad/",
+    "laqta": "https://devmaheremad.com/laqtasiteloader/",
     "hilarity": "https://hilarity-hq.vercel.app/",
-    "tuby": "https://devmaheremad.github.io/tuby/",
-    "gosto": "https://devmaheremad.github.io/gosto-ecommerce/",
+    "tuby": "https://devmaheremad.com/tuby/",
+    "gosto": "https://devmaheremad.com/gosto-ecommerce/",
 }
 
 
