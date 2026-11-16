@@ -11,20 +11,69 @@ const display = Syne({ variable: "--font-display", subsets: ["latin"], weight: [
 const body = Inter_Tight({ variable: "--font-body", subsets: ["latin"] });
 const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
 
+const SITE = "https://devmaheremad.com";
+const HANDLE = "devmaheremad";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://devmaheremad.com"),
-  title: `${profile.name} — ${profile.role}`,
-  description: profile.intro,
-  authors: [{ name: profile.name }],
+  metadataBase: new URL(SITE),
+  title: `${profile.name} (${HANDLE}) — ${profile.role}`,
+  description: `${profile.name} (${HANDLE}), ${profile.role}. ${profile.intro}`,
+  applicationName: profile.name,
+  authors: [{ name: profile.name, url: SITE }],
+  creator: profile.name,
+  keywords: [profile.name, HANDLE, profile.role, "React", "Next.js", "TypeScript", "Frontend Engineer", "Web Performance"],
   alternates: { canonical: "/" },
   openGraph: {
     title: `${profile.name} — ${profile.role}`,
     description: profile.intro,
-    type: "website",
+    type: "profile",
+    firstName: profile.first,
+    lastName: profile.last,
+    username: HANDLE,
     url: "/",
     siteName: profile.name,
   },
-  twitter: { card: "summary_large_image", creator: "@devmaheremad" },
+  twitter: { card: "summary_large_image", creator: `@${HANDLE}` },
+};
+
+// Schema.org data so search engines know that "devmaheremad", this site and the profiles below are one person.
+// Every fact here is already on the site and in the CV.
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${SITE}/#person`,
+      name: profile.name,
+      givenName: profile.first,
+      familyName: profile.last,
+      alternateName: HANDLE,
+      jobTitle: profile.role,
+      description: profile.intro,
+      url: SITE,
+      image: `https://github.com/${HANDLE}.png`,
+      email: `mailto:${profile.email}`,
+      address: { "@type": "PostalAddress", addressCountry: "PS" },
+      knowsAbout: ["React", "Next.js", "TypeScript", "JavaScript", "Frontend architecture", "Web performance", "Core Web Vitals", "Accessibility", "Design systems"],
+      sameAs: profile.links.map((l) => l.href),
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE}/#website`,
+      name: profile.name,
+      alternateName: HANDLE,
+      url: SITE,
+      publisher: { "@id": `${SITE}/#person` },
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${SITE}/#profilepage`,
+      url: SITE,
+      name: `${profile.name} — ${profile.role}`,
+      mainEntity: { "@id": `${SITE}/#person` },
+      isPartOf: { "@id": `${SITE}/#website` },
+    },
+  ],
 };
 
 export const viewport: Viewport = { themeColor: "#07070a" };
@@ -33,6 +82,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body>
+        {profile.links.map((l) => (
+          <link key={l.href} rel="me" href={l.href} />
+        ))}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         <Preloader />
         <Cursor />
         <SmoothScroll>{children}</SmoothScroll>
