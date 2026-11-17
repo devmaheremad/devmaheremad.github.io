@@ -48,10 +48,11 @@ export default function Motion({ children, className }: { children: ReactNode; c
       });
 
       gsap.utils.toArray<HTMLElement>("[data-rv-words]").forEach((t) => {
-        const s = new SplitText(t, { type: "words", aria: "auto" });
+        // Words stay real text for screen readers (no aria-label on a <p>), and the dim start still passes 3:1 contrast for large text.
+        const s = new SplitText(t, { type: "words", aria: "none" });
         gsap.fromTo(
           s.words,
-          { opacity: 0.18 },
+          { opacity: 0.4 },
           { opacity: 1, stagger: 0.05, ease: "none", scrollTrigger: { trigger: t, start: "top 80%", end: "bottom 50%", scrub: true } },
         );
       });
