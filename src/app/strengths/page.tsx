@@ -6,7 +6,7 @@ import { THEMES, companyBySlug, storyById, storyHref, strengths } from "@/conten
 import { breadcrumbs, collection, JsonLd, pageMetadata } from "@/lib/seo";
 
 const DESCRIPTION =
-  "Six frontend strengths, each backed by real stories: performance engineering, technical decisions, quality on payment flows, UX, end-to-end ownership and working across teams.";
+  "Six frontend strengths, each backed by real stories: performance, technical decisions, payment-flow quality, UX, ownership and working across teams.";
 
 export const metadata = pageMetadata({ title: "Strengths", description: DESCRIPTION, path: "/strengths/" });
 

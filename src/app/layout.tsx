@@ -19,7 +19,7 @@ const HANDLE = "devmaheremad";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: { default: `${profile.name} (${HANDLE}) — ${profile.role}`, template: `%s — ${profile.name}` },
-  description: `${profile.name} (${HANDLE}), ${profile.role}. ${profile.intro}`,
+  description: "Maher Almashharawi (devmaheremad), Senior Frontend Engineer: fast, accessible React and Next.js frontends for SaaS, e-commerce and booking. 5+ years, remote.",
   applicationName: profile.name,
   authors: [{ name: profile.name, url: SITE }],
   creator: profile.name,

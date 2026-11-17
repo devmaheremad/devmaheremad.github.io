@@ -6,7 +6,7 @@ import { companies, storiesFor } from "@/content/stories";
 import { breadcrumbs, collection, JsonLd, pageMetadata } from "@/lib/seo";
 
 const DESCRIPTION =
-  "Three chapters of shipping frontends: Konin Cloud (KoninPay, payments and Next.js), The Sailors (World Cup 2022 booking, 55% to 95%+ on Lighthouse) and Mars Innovation Technology (the Beljwar booking platform).";
+  "Three chapters: Konin Cloud (KoninPay, payments, Next.js), The Sailors (World Cup 2022 booking, 55% to 95%+ on Lighthouse) and Mars Innovation (Beljwar).";
 
 export const metadata = pageMetadata({ title: "Chapters: where I've worked", description: DESCRIPTION, path: "/work/" });
 

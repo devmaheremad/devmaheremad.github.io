@@ -6,7 +6,7 @@ import { caseStudiesLong, companyBySlug } from "@/content/stories";
 import { breadcrumbs, collection, JsonLd, OG_CASE_STUDIES, pageMetadata } from "@/lib/seo";
 
 const DESCRIPTION =
-  "Three frontend case studies: from about 55% to 95%+ on Lighthouse, a FIFA World Cup Qatar 2022 ticket-booking launch, and choosing Next.js for a multi-store SaaS platform.";
+  "Three frontend case studies: about 55% to 95%+ on Lighthouse, a FIFA World Cup Qatar 2022 booking launch, and choosing Next.js for a multi-store SaaS.";
 
 export const metadata = pageMetadata({ title: "Case studies", description: DESCRIPTION, path: "/case-studies/", image: OG_CASE_STUDIES });
 

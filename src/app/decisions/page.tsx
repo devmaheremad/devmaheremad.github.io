@@ -6,7 +6,7 @@ import { companyBySlug, stories, storyById, storyHref } from "@/content/stories"
 import { breadcrumbs, collection, JsonLd, pageMetadata } from "@/lib/seo";
 
 const DESCRIPTION =
-  "How I make frontend decisions, the calls I'd make again (Next.js over Blade, the World Cup booking inside the platform, Lighthouse before merge) and the ones made under pressure.";
+  "How I make frontend decisions: the calls I'd make again (Next.js over Blade, World Cup booking inside the platform) and the ones made under pressure.";
 
 export const metadata = pageMetadata({ title: "Decisions, and why", description: DESCRIPTION, path: "/decisions/" });
 

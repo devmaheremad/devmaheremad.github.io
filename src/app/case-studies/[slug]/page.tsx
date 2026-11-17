@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps<"/case-studies/[slu
   const cs = find((await params).slug);
   if (!cs) return {};
   return pageMetadata({
-    title: `${cs.title} · Case study`,
+    title: cs.title,
     description: clip(`${cs.outcome} ${cs.constraint}`, 158),
     path: `/case-studies/${cs.slug}/`,
     type: "article",
