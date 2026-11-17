@@ -12,6 +12,16 @@ export const OG_CASE_STUDIES = {
   alt: "Case studies by Maher Almashharawi: from about 55% to 95%+ on Lighthouse, FIFA World Cup Qatar 2022 ticket booking, choosing Next.js for a multi-store SaaS",
 };
 
+export const OG_AR = {
+  url: "/og/ar.png",
+  width: 1200,
+  height: 630,
+  alt: "ماهر المشهراوي (Maher Almashharawi)، مهندس واجهات أمامية أول. React وNext.js وTypeScript. devmaheremad.com",
+};
+
+// Every spelling people search for: the Arabic name, the handle, and the hyphenated forms.
+export const NAME_VARIANTS = ["ماهر المشهراوي", "devmaheremad", "Maher Al-Mashharawi", "Maher Al Mashharawi"];
+
 export function pageMetadata({
   title,
   description,

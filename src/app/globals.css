@@ -87,6 +87,23 @@
   }
 }
 
+/* ---------- Arabic page (/ar/) ---------- */
+/* Arabic letters join, so no letter-spacing, no uppercase, and fonts that carry Arabic glyphs. */
+.ar-page {
+  font-family: var(--font-ar-body), system-ui, sans-serif;
+}
+
+.ar-page .font-display {
+  font-family: var(--font-ar-display), var(--font-ar-body), sans-serif;
+}
+
+.ar-page .eyebrow {
+  font-family: var(--font-ar-body), system-ui, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 /* ---------- film grain ---------- */
 .grain {
   position: fixed;

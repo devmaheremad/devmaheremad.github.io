@@ -7,10 +7,19 @@ import { gsap, onReady } from "@/lib/motion";
 import { profile } from "@/content/site";
 import { companies } from "@/content/stories";
 
-const INLINE = [
+type NavLink = { href: string; label: string; lang?: "en" | "ar" };
+
+const INLINE: NavLink[] = [
   { href: "/work/", label: "Chapters" },
   { href: "/stories/", label: "Stories" },
   { href: "/decisions/", label: "Decisions" },
+  { href: "/ar/", label: "العربية", lang: "ar" },
+];
+
+// On the Arabic page the bar offers the way back to English.
+const INLINE_AR: NavLink[] = [
+  { href: "/case-studies/", label: "Case studies", lang: "en" },
+  { href: "/", label: "English", lang: "en" },
 ];
 
 const MENU = [
@@ -21,6 +30,7 @@ const MENU = [
   { href: "/decisions/", label: "Decisions" },
   { href: "/stories/", label: "Stories" },
   { href: "/#contact", label: "Contact" },
+  { href: "/ar/", label: "العربية" },
 ];
 
 function useClock(tz: string) {
@@ -44,6 +54,8 @@ export default function Nav() {
   const [hidden, setHidden] = useState(false);
   const time = useClock(profile.timezone);
   const pathname = usePathname();
+  const isAr = pathname === "/ar" || pathname.startsWith("/ar/");
+  const inline = isAr ? INLINE_AR : INLINE;
   const [menuPath, setMenuPath] = useState(pathname);
 
   // A new page closes the menu (adjusting state during render, not in an effect).
@@ -119,7 +131,7 @@ export default function Nav() {
           } ${scrolled && !open ? "border-line bg-bg/75 backdrop-blur-xl backdrop-saturate-150" : "border-transparent bg-transparent"}`}
         >
         <nav className={`flex items-center justify-between px-5 sm:px-10 transition-[padding] duration-500 ${scrolled && !open ? "py-3.5" : "py-5"}`} aria-label="Main">
-          <Link href="/" data-magnetic className="font-display text-xl font-extrabold tracking-tight" aria-label="Maher Almashharawi, home">
+          <Link href={isAr ? "/ar/" : "/"} dir="ltr" data-magnetic className="font-display text-xl font-extrabold tracking-tight" aria-label="Maher Almashharawi, home">
             MA<span className="text-cyan">.</span>
           </Link>
           <div className="hidden items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.18em] text-ink/70 lg:flex">
@@ -127,15 +139,24 @@ export default function Nav() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
             </span>
-            Available now · Palestine {time}
+            {isAr ? (
+              <span lang="ar" className="font-sans text-xs normal-case tracking-normal">
+                متاح الآن · فلسطين {time}
+              </span>
+            ) : (
+              <>Available now · Palestine {time}</>
+            )}
           </div>
           <ul className="flex items-center gap-4 sm:gap-8">
-            {INLINE.map((l) => (
+            {inline.map((l) => (
               <li key={l.href} className="hidden md:block">
                 <Link
                   href={l.href}
+                  lang={l.lang}
+                  hrefLang={l.lang}
+                  data-transition={l.label}
                   aria-current={pathname === l.href ? "page" : undefined}
-                  className="group relative font-mono text-[0.72rem] uppercase tracking-[0.18em]"
+                  className={`group relative ${l.lang === "ar" ? "text-sm" : "font-mono text-[0.72rem] uppercase tracking-[0.18em]"}`}
                 >
                   {l.label}
                   <span
@@ -154,7 +175,15 @@ export default function Nav() {
                 data-magnetic
                 className="flex items-center gap-3 font-mono text-[0.72rem] uppercase tracking-[0.18em]"
               >
-                {open ? "Close" : "Menu"}
+                {isAr ? (
+                  <span lang="ar" className="font-sans text-sm normal-case tracking-normal">
+                    {open ? "إغلاق" : "القائمة"}
+                  </span>
+                ) : open ? (
+                  "Close"
+                ) : (
+                  "Menu"
+                )}
                 <span className="relative block h-3 w-6" aria-hidden>
                   <span className={`absolute left-0 h-px w-full bg-ink transition-transform duration-500 ${open ? "top-1.5 rotate-45" : "top-0.5"}`} />
                   <span className={`absolute left-0 h-px w-full bg-ink transition-transform duration-500 ${open ? "top-1.5 -rotate-45" : "top-2.5"}`} />

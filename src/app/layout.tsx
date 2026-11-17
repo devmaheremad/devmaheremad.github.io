@@ -7,7 +7,9 @@ import Cursor from "@/components/Cursor";
 import Preloader from "@/components/Preloader";
 import Nav from "@/components/Nav";
 import PageTransition from "@/components/PageTransition";
+import LangSync from "@/components/LangSync";
 import { profile } from "@/content/site";
+import { NAME_VARIANTS } from "@/lib/seo";
 
 const display = Syne({ variable: "--font-display", subsets: ["latin"], weight: ["600", "700", "800"] });
 const body = Inter_Tight({ variable: "--font-body", subsets: ["latin"] });
@@ -23,8 +25,9 @@ export const metadata: Metadata = {
   applicationName: profile.name,
   authors: [{ name: profile.name, url: SITE }],
   creator: profile.name,
-  keywords: [profile.name, HANDLE, profile.role, "React", "Next.js", "TypeScript", "Frontend Engineer", "Web Performance"],
-  alternates: { canonical: "/" },
+  keywords: [profile.name, ...NAME_VARIANTS, profile.role, "React", "Next.js", "TypeScript", "Frontend Engineer", "Web Performance"],
+  // The home page has an Arabic twin; child pages set their own alternates (canonical only), which replaces this.
+  alternates: { canonical: "/", languages: { en: "/", ar: "/ar/", "x-default": "/" } },
   openGraph: {
     title: `${profile.name} — ${profile.role}`,
     description: profile.intro,
@@ -49,13 +52,16 @@ const structuredData = {
       name: profile.name,
       givenName: profile.first,
       familyName: profile.last,
-      alternateName: HANDLE,
+      alternateName: NAME_VARIANTS,
       jobTitle: profile.role,
       description: profile.intro,
       url: SITE,
       image: `https://github.com/${HANDLE}.png`,
       email: `mailto:${profile.email}`,
       address: { "@type": "PostalAddress", addressCountry: "PS" },
+      knowsLanguage: ["ar", "en", "de"],
+      alumniOf: { "@type": "CollegeOrUniversity", name: "Islamic University of Gaza", alternateName: "الجامعة الإسلامية بغزة" },
+      subjectOf: { "@id": `${SITE}/ar/#profilepage` },
       knowsAbout: ["React", "Next.js", "TypeScript", "JavaScript", "Frontend architecture", "Web performance", "Core Web Vitals", "Accessibility", "Design systems"],
       sameAs: profile.links.map((l) => l.href),
     },
@@ -63,8 +69,9 @@ const structuredData = {
       "@type": "WebSite",
       "@id": `${SITE}/#website`,
       name: profile.name,
-      alternateName: HANDLE,
+      alternateName: NAME_VARIANTS,
       url: SITE,
+      inLanguage: ["en", "ar"],
       publisher: { "@id": `${SITE}/#person` },
     },
     {
@@ -82,7 +89,8 @@ export const viewport: Viewport = { themeColor: "#07070a" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    // The Arabic page's static HTML gets lang="ar" dir="rtl" after the build (scripts/flatten-segments.mjs); LangSync keeps it right on client navigation.
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`} suppressHydrationWarning>
       <body>
         {profile.links.map((l) => (
           <link key={l.href} rel="me" href={l.href} />
@@ -92,6 +100,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Cursor />
         <Nav />
         <PageTransition />
+        <LangSync />
         <SmoothScroll>{children}</SmoothScroll>
         <div className="grain" aria-hidden />
       </body>

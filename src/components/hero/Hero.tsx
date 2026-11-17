@@ -158,7 +158,7 @@ export default function Hero() {
         </div>
       </div>
       <h1 className="sr-only">
-        {profile.name}, {profile.role}
+        {profile.name} (<span lang="ar">ماهر المشهراوي</span>), {profile.role}
       </h1>
     </section>
   );
