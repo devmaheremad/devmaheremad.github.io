@@ -215,7 +215,7 @@ export const caseStudies = [
     stack: ["React", "TypeScript", "Material UI"],
   },
   {
-    slug: "nextjs",
+    slug: "nextjs-saas",
     title: "Choosing Next.js for a multi-store SaaS platform",
     outcome: "A written technical comparison that supported the team's decision to build on Next.js.",
     context: "Konin Cloud's KoninPay: a multi-store SaaS platform with merchant and store creation, payment workflows and a digital wallet. Senior Frontend Developer, remote.",

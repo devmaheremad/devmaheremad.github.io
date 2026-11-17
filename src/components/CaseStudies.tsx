@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/motion";
 import { caseStudies } from "@/content/site";
@@ -80,6 +81,14 @@ export default function CaseStudies() {
                 <p className="eyebrow mb-2">Result</p>
                 <p className="leading-relaxed text-ink/80">{c.result}</p>
               </div>
+              <Link
+                href={`/case-studies/${c.slug}/`}
+                data-transition={c.title}
+                className="cs-in group inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.18em] text-cyan"
+              >
+                Read the full case study
+                <span className="transition-transform duration-500 group-hover:translate-x-2">→</span>
+              </Link>
             </div>
           </li>
         ))}

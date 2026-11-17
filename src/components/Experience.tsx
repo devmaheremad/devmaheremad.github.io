@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/motion";
 import { experience } from "@/content/site";
+import { companies } from "@/content/stories";
 
 export default function Experience() {
   const root = useRef<HTMLElement>(null);
@@ -44,6 +46,16 @@ export default function Experience() {
               <p className="xp-in mt-2 text-muted">
                 {x.role} · {x.place}
               </p>
+              {companies.some((c) => c.name === x.company) && (
+                <Link
+                  href={`/work/${companies.find((c) => c.name === x.company)!.slug}/`}
+                  data-transition={x.company}
+                  className="xp-in group mt-5 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.18em] text-cyan"
+                >
+                  Read the chapter
+                  <span className="transition-transform duration-500 group-hover:translate-x-2">→</span>
+                </Link>
+              )}
             </div>
             <ul className="space-y-3 md:col-span-7 md:col-start-6">
               {x.points.map((pt) => (

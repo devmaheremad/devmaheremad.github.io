@@ -5,6 +5,8 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
 import Preloader from "@/components/Preloader";
+import Nav from "@/components/Nav";
+import PageTransition from "@/components/PageTransition";
 import { profile } from "@/content/site";
 
 const display = Syne({ variable: "--font-display", subsets: ["latin"], weight: ["600", "700", "800"] });
@@ -16,7 +18,7 @@ const HANDLE = "devmaheremad";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
-  title: `${profile.name} (${HANDLE}) — ${profile.role}`,
+  title: { default: `${profile.name} (${HANDLE}) — ${profile.role}`, template: `%s — ${profile.name}` },
   description: `${profile.name} (${HANDLE}), ${profile.role}. ${profile.intro}`,
   applicationName: profile.name,
   authors: [{ name: profile.name, url: SITE }],
@@ -88,6 +90,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         <Preloader />
         <Cursor />
+        <Nav />
+        <PageTransition />
         <SmoothScroll>{children}</SmoothScroll>
         <div className="grain" aria-hidden />
       </body>
