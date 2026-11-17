@@ -3,7 +3,7 @@ import Contact from "@/components/Contact";
 import Motion from "@/components/page/Motion";
 import { Chip, NextChapter, PageHero, SectionHead, StoryCard, BigLine } from "@/components/page/ui";
 import { caseStudiesLong, companyBySlug, storyById } from "@/content/stories";
-import { article, breadcrumbs, JsonLd, pageMetadata } from "@/lib/seo";
+import { article, breadcrumbs, JsonLd, OG_CASE_STUDIES, pageMetadata } from "@/lib/seo";
 import { clip } from "@/lib/text";
 
 export const dynamicParams = false;
@@ -22,6 +22,7 @@ export async function generateMetadata({ params }: PageProps<"/case-studies/[slu
     description: clip(`${cs.outcome} ${cs.constraint}`, 158),
     path: `/case-studies/${cs.slug}/`,
     type: "article",
+    image: OG_CASE_STUDIES,
   });
 }
 

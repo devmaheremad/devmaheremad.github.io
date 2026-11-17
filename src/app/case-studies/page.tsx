@@ -3,12 +3,12 @@ import Contact from "@/components/Contact";
 import Motion from "@/components/page/Motion";
 import { NextChapter, PageHero } from "@/components/page/ui";
 import { caseStudiesLong, companyBySlug } from "@/content/stories";
-import { breadcrumbs, collection, JsonLd, pageMetadata } from "@/lib/seo";
+import { breadcrumbs, collection, JsonLd, OG_CASE_STUDIES, pageMetadata } from "@/lib/seo";
 
 const DESCRIPTION =
   "Three frontend case studies: from about 55% to 95%+ on Lighthouse, a FIFA World Cup Qatar 2022 ticket-booking launch, and choosing Next.js for a multi-store SaaS platform.";
 
-export const metadata = pageMetadata({ title: "Case studies", description: DESCRIPTION, path: "/case-studies/" });
+export const metadata = pageMetadata({ title: "Case studies", description: DESCRIPTION, path: "/case-studies/", image: OG_CASE_STUDIES });
 
 export default function CaseStudiesIndex() {
   return (

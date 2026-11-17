@@ -3,23 +3,34 @@ import type { Metadata } from "next";
 export const SITE = "https://devmaheremad.com";
 export const PERSON_ID = `${SITE}/#person`;
 
+// A page that sets its own openGraph replaces the parent's, image included, so every page names its image here.
+export const OG_DEFAULT = { url: "/opengraph-image.png", width: 1200, height: 630, alt: 'Maher Almashharawi, Senior Frontend Engineer. React, Next.js, TypeScript. devmaheremad.com' };
+export const OG_CASE_STUDIES = {
+  url: "/og/case-studies.png",
+  width: 1200,
+  height: 630,
+  alt: "Case studies by Maher Almashharawi: from about 55% to 95%+ on Lighthouse, FIFA World Cup Qatar 2022 ticket booking, choosing Next.js for a multi-store SaaS",
+};
+
 export function pageMetadata({
   title,
   description,
   path,
   type = "website",
+  image = OG_DEFAULT,
 }: {
   title: string;
   description: string;
   path: string;
   type?: "website" | "article";
+  image?: typeof OG_DEFAULT;
 }): Metadata {
   return {
     title,
     description,
     alternates: { canonical: path },
-    openGraph: { title: `${title} — Maher Almashharawi`, description, url: path, type, siteName: "Maher Almashharawi" },
-    twitter: { card: "summary_large_image", title: `${title} — Maher Almashharawi`, description, creator: "@devmaheremad" },
+    openGraph: { title: `${title} — Maher Almashharawi`, description, url: path, type, siteName: "Maher Almashharawi", images: [image] },
+    twitter: { card: "summary_large_image", title: `${title} — Maher Almashharawi`, description, creator: "@devmaheremad", images: [image] },
   };
 }
 
