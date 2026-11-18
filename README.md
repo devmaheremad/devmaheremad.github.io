@@ -2,6 +2,8 @@
 
 **Live:** https://devmaheremad.com
 
+![devmaheremad.com](src/app/opengraph-image.png)
+
 Personal site of a Senior Frontend Engineer (React, Next.js, TypeScript). A static Next.js export with a WebGL hero,
 smooth scrolling and scroll-driven animation, kept fast: Lighthouse 90+ performance and 100 accessibility, best practices and SEO.
 
@@ -26,3 +28,8 @@ npm run dev
 
 ## Stack
 Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Three.js · React Three Fiber · drei · GSAP · Lenis
+
+---
+
+**Maher Almashharawi** · Senior Frontend Engineer (React, Next.js, TypeScript)
+[devmaheremad.com](https://devmaheremad.com) · [Case studies](https://devmaheremad.com/case-studies/) · [LinkedIn](https://www.linkedin.com/in/devmaheremad) · hello@devmaheremad.com
