@@ -87,8 +87,9 @@
   }
 }
 
-/* ---------- Arabic page (/ar/) ---------- */
-/* Arabic letters join, so no letter-spacing, no uppercase, and fonts that carry Arabic glyphs. */
+/* ---------- Arabic pages (/ar/ and everything under it) ---------- */
+/* Arabic letters join, so no letter-spacing, no uppercase, and fonts that carry Arabic glyphs.
+   The font variables are set on :root by src/app/ar/layout.tsx, so they exist on Arabic pages only. */
 .ar-page {
   font-family: var(--font-ar-body), system-ui, sans-serif;
 }
@@ -102,6 +103,33 @@
   font-size: 0.85rem;
   letter-spacing: 0;
   text-transform: none;
+}
+
+/* Spacing between letters pulls joined Arabic letters apart. */
+.ar-page [class*="tracking-"] {
+  letter-spacing: 0;
+}
+
+/* Mono labels keep their Latin font; Arabic letters inside them fall back to the Arabic body font. */
+.ar-page .font-mono {
+  font-family: var(--font-mono), var(--font-ar-body), ui-monospace, monospace;
+}
+
+/* The English inner pages set headings very tight; Arabic needs room for the dots and marks above and below. */
+.ar-sub .font-display:not(.text-outline) {
+  line-height: 1.35;
+}
+
+/* Arabic words in the bar and on the page curtain. */
+.font-ar {
+  font-family: var(--font-ar-body, system-ui), system-ui, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+[data-curtain-label]:lang(ar) {
+  font-family: var(--font-ar-display, system-ui), system-ui, sans-serif;
+  letter-spacing: 0;
 }
 
 /* ---------- film grain ---------- */

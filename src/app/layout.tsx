@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   authors: [{ name: profile.name, url: SITE }],
   creator: profile.name,
   keywords: [profile.name, ...NAME_VARIANTS, profile.role, "React", "Next.js", "TypeScript", "Frontend Engineer", "Web Performance"],
-  // The home page has an Arabic twin; child pages set their own alternates (canonical only), which replaces this.
+  // Every page has an Arabic twin under /ar/; child pages set their own canonical and language alternates (lib/seo.tsx).
   alternates: { canonical: "/", languages: { en: "/", ar: "/ar/", "x-default": "/" } },
   openGraph: {
     title: `${profile.name} — ${profile.role}`,

@@ -6,32 +6,35 @@ import { useEffect, useRef, useState } from "react";
 import { gsap, onReady } from "@/lib/motion";
 import { profile } from "@/content/site";
 import { companies } from "@/content/stories";
+import { counterpart, isArPath, localePath, UI, type Lang } from "@/lib/i18n";
 
-type NavLink = { href: string; label: string; lang?: "en" | "ar" };
+type NavLink = { href: string; label: string; lang?: Lang };
 
-const INLINE: NavLink[] = [
-  { href: "/work/", label: "Chapters" },
-  { href: "/stories/", label: "Stories" },
-  { href: "/decisions/", label: "Decisions" },
-  { href: "/ar/", label: "العربية", lang: "ar" },
-];
+// Every page has a twin in the other language; the switch goes to the same page, not to the other homepage.
+function inlineLinks(lang: Lang, pathname: string): NavLink[] {
+  const t = UI[lang];
+  const other = counterpart(pathname);
+  return [
+    { href: localePath("/work/", lang), label: t.chapters, lang },
+    { href: localePath("/stories/", lang), label: t.stories, lang },
+    { href: localePath("/decisions/", lang), label: t.decisions, lang },
+    lang === "ar" ? { href: other, label: "English", lang: "en" } : { href: other, label: "العربية", lang: "ar" },
+  ];
+}
 
-// On the Arabic page the bar offers the way back to English.
-const INLINE_AR: NavLink[] = [
-  { href: "/case-studies/", label: "Case studies", lang: "en" },
-  { href: "/", label: "English", lang: "en" },
-];
-
-const MENU = [
-  { href: "/", label: "Home" },
-  { href: "/work/", label: "Chapters" },
-  { href: "/case-studies/", label: "Case studies" },
-  { href: "/strengths/", label: "Strengths" },
-  { href: "/decisions/", label: "Decisions" },
-  { href: "/stories/", label: "Stories" },
-  { href: "/#contact", label: "Contact" },
-  { href: "/ar/", label: "العربية" },
-];
+function menuLinks(lang: Lang, pathname: string): NavLink[] {
+  const t = UI[lang];
+  return [
+    { href: localePath("/", lang), label: t.home },
+    { href: localePath("/work/", lang), label: t.chapters },
+    { href: localePath("/case-studies/", lang), label: t.caseStudies },
+    { href: localePath("/strengths/", lang), label: t.strengths },
+    { href: localePath("/decisions/", lang), label: t.decisions },
+    { href: localePath("/stories/", lang), label: t.stories },
+    { href: `${localePath("/", lang)}#contact`, label: t.contact },
+    lang === "ar" ? { href: counterpart(pathname), label: "English", lang: "en" } : { href: counterpart(pathname), label: "العربية", lang: "ar" },
+  ];
+}
 
 function useClock(tz: string) {
   const [time, setTime] = useState("");
@@ -54,8 +57,10 @@ export default function Nav() {
   const [hidden, setHidden] = useState(false);
   const time = useClock(profile.timezone);
   const pathname = usePathname();
-  const isAr = pathname === "/ar" || pathname.startsWith("/ar/");
-  const inline = isAr ? INLINE_AR : INLINE;
+  const isAr = isArPath(pathname);
+  const lang: Lang = isAr ? "ar" : "en";
+  const inline = inlineLinks(lang, pathname);
+  const menu = menuLinks(lang, pathname);
   const [menuPath, setMenuPath] = useState(pathname);
 
   // A new page closes the menu (adjusting state during render, not in an effect).
@@ -140,7 +145,7 @@ export default function Nav() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
             </span>
             {isAr ? (
-              <span lang="ar" className="font-sans text-xs normal-case tracking-normal">
+              <span lang="ar" className="font-ar text-xs">
                 متاح الآن · فلسطين {time}
               </span>
             ) : (
@@ -156,7 +161,7 @@ export default function Nav() {
                   hrefLang={l.lang}
                   data-transition={l.label}
                   aria-current={pathname === l.href ? "page" : undefined}
-                  className={`group relative ${l.lang === "ar" ? "text-sm" : "font-mono text-[0.72rem] uppercase tracking-[0.18em]"}`}
+                  className={`group relative ${l.lang === "ar" ? "font-ar text-sm" : "font-mono text-[0.72rem] uppercase tracking-[0.18em]"}`}
                 >
                   {l.label}
                   <span
@@ -176,7 +181,7 @@ export default function Nav() {
                 className="flex items-center gap-3 font-mono text-[0.72rem] uppercase tracking-[0.18em]"
               >
                 {isAr ? (
-                  <span lang="ar" className="font-sans text-sm normal-case tracking-normal">
+                  <span lang="ar" className="font-ar text-sm">
                     {open ? "إغلاق" : "القائمة"}
                   </span>
                 ) : open ? (
@@ -200,25 +205,33 @@ export default function Nav() {
         ref={panel}
         role="dialog"
         aria-modal="true"
-        aria-label="Site menu"
+        aria-label={isAr ? "قائمة الموقع" : "Site menu"}
         aria-hidden={!open}
-        className="invisible fixed inset-0 z-[54] overflow-y-auto bg-bg-2"
+        lang={lang}
+        dir={isAr ? "rtl" : "ltr"}
+        className={`invisible fixed inset-0 z-[54] overflow-y-auto bg-bg-2 ${isAr ? "ar-page ar-sub" : ""}`}
         data-lenis-prevent
       >
         <div className="pointer-events-none absolute -right-[20vw] -top-[20vh] h-[80vh] w-[80vh] rounded-full bg-[radial-gradient(circle,rgba(76,195,255,.18),rgba(182,156,255,.1)_45%,transparent_70%)] blur-2xl" />
         <div className="relative grid min-h-full gap-12 px-5 pb-10 pt-28 sm:px-10 lg:grid-cols-12">
           <ol className="lg:col-span-8">
-            {MENU.map((l, i) => (
+            {menu.map((l, i) => (
               <li key={l.href} className="overflow-hidden border-b border-line">
                 <Link
                   href={l.href}
+                  lang={l.lang}
+                  hrefLang={l.lang}
                   tabIndex={open ? 0 : -1}
                   onClick={() => setOpen(false)}
                   data-transition={l.label}
                   className="mn-link group flex items-baseline gap-5 py-2 sm:py-3"
                 >
                   <span className="eyebrow w-8 shrink-0">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="font-display text-[clamp(2.4rem,7vw,6.2rem)] font-extrabold leading-[1] tracking-tight transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-5">
+                  <span
+                    className={`font-display text-[clamp(2.4rem,7vw,6.2rem)] font-extrabold leading-[1] tracking-tight transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${
+                      isAr ? "group-hover:-translate-x-5" : "group-hover:translate-x-5"
+                    }`}
+                  >
                     <span className="transition-colors duration-500 group-hover:text-cyan">{l.label}</span>
                   </span>
                 </Link>
@@ -227,11 +240,11 @@ export default function Nav() {
           </ol>
           <div className="space-y-10 lg:col-span-3 lg:col-start-10 lg:pt-4">
             <div className="mn-fade">
-              <p className="eyebrow mb-4">Chapters</p>
+              <p className="eyebrow mb-4">{UI[lang].chapters}</p>
               <ul className="space-y-2">
                 {companies.map((c) => (
                   <li key={c.slug}>
-                    <Link href={`/work/${c.slug}/`} tabIndex={open ? 0 : -1} onClick={() => setOpen(false)} data-transition={c.name} className="group flex items-baseline gap-3 text-lg">
+                    <Link href={localePath(`/work/${c.slug}/`, lang)} lang="en" tabIndex={open ? 0 : -1} onClick={() => setOpen(false)} data-transition={c.name} className="group flex items-baseline gap-3 text-lg">
                       <span className="eyebrow">{c.index}</span>
                       <span className="transition-colors group-hover:text-cyan">{c.name}</span>
                     </Link>
@@ -240,8 +253,8 @@ export default function Nav() {
               </ul>
             </div>
             <div className="mn-fade">
-              <p className="eyebrow mb-4">Say hello</p>
-              <a href={`mailto:${profile.email}`} tabIndex={open ? 0 : -1} className="text-lg hover:text-cyan">
+              <p className="eyebrow mb-4">{isAr ? "راسلني" : "Say hello"}</p>
+              <a href={`mailto:${profile.email}`} dir="ltr" tabIndex={open ? 0 : -1} className="text-lg hover:text-cyan">
                 {profile.email}
               </a>
             </div>

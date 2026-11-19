@@ -107,10 +107,10 @@ export const ar = {
   education: { degree: "بكالوريوس هندسة", school: "الجامعة الإسلامية بغزة", period: "2014 — 2019" },
   languages: "العربية (اللغة الأم) · الإنجليزية (كفاءة مهنية كاملة) · الألمانية (مبتدئ)",
   pages: [
-    { href: "/work/", label: "الفصول: الشركات التي عملت معها" },
-    { href: "/case-studies/", label: "دراسات الحالة كاملة" },
-    { href: "/strengths/", label: "نقاط القوة مع الأدلة" },
-    { href: "/decisions/", label: "كيف أتخذ القرارات" },
-    { href: "/stories/", label: "22 قصة من العمل" },
+    { href: "/ar/work/", label: "الفصول: الشركات التي عملت معها" },
+    { href: "/ar/case-studies/", label: "دراسات الحالة كاملة" },
+    { href: "/ar/strengths/", label: "نقاط القوة مع الأدلة" },
+    { href: "/ar/decisions/", label: "كيف أتخذ القرارات" },
+    { href: "/ar/stories/", label: "22 قصة من العمل" },
   ],
 };

@@ -51,7 +51,12 @@ export default function PageTransition() {
         return;
       }
       covering.current = true;
-      if (label.current) label.current.textContent = a.dataset.transition ?? (a.children.length ? "" : a.textContent?.trim().slice(0, 40) ?? "");
+      if (label.current) {
+        const text = a.dataset.transition ?? (a.children.length ? "" : a.textContent?.trim().slice(0, 40) ?? "");
+        label.current.textContent = text;
+        // Arabic labels get the Arabic font (globals.css, [data-curtain-label]:lang(ar)).
+        label.current.lang = /[؀-ۿ]/.test(text) ? "ar" : "en";
+      }
       // Navigate when the curtain is closed, or after 1.2s at the latest (animation frames can stall in background tabs).
       let gone = false;
       const go = () => {
@@ -97,7 +102,7 @@ export default function PageTransition() {
     <div ref={curtain} aria-hidden className="pointer-events-none fixed inset-0 z-[65] flex items-center justify-center bg-bg-2" style={{ transform: "translateY(100%)" }}>
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-cyan to-violet" />
       <span className="overflow-hidden">
-        <span ref={label} className="block font-display text-[clamp(2rem,6vw,5rem)] font-extrabold tracking-tight" />
+        <span ref={label} data-curtain-label className="block font-display text-[clamp(2rem,6vw,5rem)] font-extrabold tracking-tight" />
       </span>
     </div>
   );

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { localePath, type Lang } from "./i18n";
 
 export const SITE = "https://devmaheremad.com";
 export const PERSON_ID = `${SITE}/#person`;
@@ -27,57 +28,90 @@ export function pageMetadata({
   description,
   path,
   type = "website",
-  image = OG_DEFAULT,
+  image,
+  lang = "en",
 }: {
   title: string;
   description: string;
+  /** The English path; the Arabic page lives at /ar + path. */
   path: string;
   type?: "website" | "article";
   image?: typeof OG_DEFAULT;
+  lang?: Lang;
 }): Metadata {
+  const ar = lang === "ar";
+  const url = localePath(path, lang);
+  const img = image ?? (ar ? OG_AR : OG_DEFAULT);
+  const full = `${title} — ${ar ? "ماهر المشهراوي" : "Maher Almashharawi"}`;
   return {
-    title,
+    // The root layout's title template adds the English name; Arabic pages carry the Arabic one instead.
+    title: ar ? { absolute: full } : title,
     description,
-    alternates: { canonical: path },
-    openGraph: { title: `${title} — Maher Almashharawi`, description, url: path, type, siteName: "Maher Almashharawi", images: [image] },
-    twitter: { card: "summary_large_image", title: `${title} — Maher Almashharawi`, description, creator: "@devmaheremad", images: [image] },
+    alternates: { canonical: url, languages: { en: path, ar: localePath(path, "ar"), "x-default": path } },
+    openGraph: {
+      title: full,
+      description,
+      url,
+      type,
+      siteName: ar ? "Maher Almashharawi · ماهر المشهراوي" : "Maher Almashharawi",
+      locale: ar ? "ar_AR" : "en_US",
+      alternateLocale: [ar ? "en_US" : "ar_AR"],
+      images: [img],
+    },
+    twitter: { card: "summary_large_image", title: full, description, creator: "@devmaheremad", images: [img] },
   };
 }
 
-export function breadcrumbs(items: { name: string; path: string }[]) {
+export function breadcrumbs(items: { name: string; path: string }[], lang: Lang = "en") {
+  const home = { name: lang === "ar" ? "الرئيسية" : "Home", path: "/" };
   return {
     "@type": "BreadcrumbList",
-    itemListElement: [{ name: "Home", path: "/" }, ...items].map((it, i) => ({
+    itemListElement: [home, ...items].map((it, i) => ({
       "@type": "ListItem",
       position: i + 1,
       name: it.name,
-      item: `${SITE}${it.path}`,
+      item: `${SITE}${localePath(it.path, lang)}`,
     })),
   };
 }
 
-export function article({ headline, description, path, about }: { headline: string; description: string; path: string; about?: string }) {
+export function article({
+  headline,
+  description,
+  path,
+  about,
+  lang = "en",
+}: {
+  headline: string;
+  description: string;
+  path: string;
+  about?: string;
+  lang?: Lang;
+}) {
+  const url = `${SITE}${localePath(path, lang)}`;
   return {
     "@type": "Article",
-    "@id": `${SITE}${path}#article`,
+    "@id": `${url}#article`,
     headline,
     description,
-    url: `${SITE}${path}`,
-    mainEntityOfPage: `${SITE}${path}`,
+    url,
+    mainEntityOfPage: url,
     author: { "@id": PERSON_ID },
     publisher: { "@id": PERSON_ID },
-    inLanguage: "en",
+    inLanguage: lang,
     ...(about ? { about: { "@type": "Organization", name: about } } : {}),
   };
 }
 
-export function collection({ name, description, path }: { name: string; description: string; path: string }) {
+export function collection({ name, description, path, lang = "en" }: { name: string; description: string; path: string; lang?: Lang }) {
+  const url = `${SITE}${localePath(path, lang)}`;
   return {
     "@type": "CollectionPage",
-    "@id": `${SITE}${path}#page`,
+    "@id": `${url}#page`,
     name,
     description,
-    url: `${SITE}${path}`,
+    url,
+    inLanguage: lang,
     author: { "@id": PERSON_ID },
     isPartOf: { "@id": `${SITE}/#website` },
   };

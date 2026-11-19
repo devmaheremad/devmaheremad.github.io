@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 import Link from "next/link";
-import { Alexandria, IBM_Plex_Sans_Arabic } from "next/font/google";
+import ContactAr from "@/components/ContactAr";
 import Motion from "@/components/page/Motion";
 import Liquid from "@/components/page/Liquid";
-import { Chip } from "@/components/page/ui";
+import { Chip, Ltr } from "@/components/page/ui";
 import { ar } from "@/content/ar";
 import { profile, stack } from "@/content/site";
 import { JsonLd, OG_AR, PERSON_ID, SITE } from "@/lib/seo";
-
-// Arabic fonts load on this page only; the English pages keep their Latin fonts.
-const arDisplay = Alexandria({ variable: "--font-ar-display", subsets: ["arabic", "latin"], weight: ["700", "800"] });
-const arBody = IBM_Plex_Sans_Arabic({ variable: "--font-ar-body", subsets: ["arabic", "latin"], weight: ["400", "500", "700"] });
 
 export const metadata: Metadata = {
   title: { absolute: ar.title },
@@ -30,13 +25,6 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: ar.title, description: ar.description, creator: "@devmaheremad", images: [OG_AR] },
 };
 
-// Numbers and Latin names stay left-to-right inside Arabic sentences.
-const Ltr = ({ children }: { children: ReactNode }) => (
-  <bdi dir="ltr" className="inline-block">
-    {children}
-  </bdi>
-);
-
 function Head({ index, label, title }: { index: string; label: string; title: string }) {
   return (
     <div className="mb-14">
@@ -52,7 +40,7 @@ function Head({ index, label, title }: { index: string; label: string; title: st
 
 export default function ArabicHome() {
   return (
-    <Motion className={`ar-page ${arDisplay.variable} ${arBody.variable}`}>
+    <Motion>
       <meta httpEquiv="content-language" content="ar" />
       <JsonLd
         graph={[
@@ -178,8 +166,8 @@ export default function ArabicHome() {
                     ))}
                   </ul>
                   {e.slug && (
-                    <Link href={`/work/${e.slug}/`} hrefLang="en" data-transition={e.company} className="eyebrow mt-6 inline-block hover:text-ink">
-                      القصة كاملة بالإنجليزية ↗
+                    <Link href={`/ar/work/${e.slug}/`} data-transition={e.company} className="eyebrow mt-6 inline-block hover:text-ink">
+                      القصة كاملة ←
                     </Link>
                   )}
                 </div>
@@ -195,9 +183,8 @@ export default function ArabicHome() {
             {ar.caseStudies.map((cs, k) => (
               <Link
                 key={cs.slug}
-                href={`/case-studies/${cs.slug}/`}
-                hrefLang="en"
-                data-transition="Case study"
+                href={`/ar/case-studies/${cs.slug}/`}
+                data-transition="دراسة حالة"
                 data-spot
                 data-rv
                 className="spot group flex flex-col justify-between rounded-3xl border border-line bg-bg-2/60 p-8 sm:p-10"
@@ -210,7 +197,7 @@ export default function ArabicHome() {
                   <p className="mt-4 text-lg leading-loose text-cyan/90">{cs.outcome}</p>
                   <p className="mt-4 leading-loose text-ink/75">{cs.body}</p>
                 </div>
-                <span className="eyebrow mt-8 transition-colors group-hover:text-ink">دراسة الحالة كاملة بالإنجليزية ↗</span>
+                <span className="eyebrow mt-8 transition-colors group-hover:text-ink">دراسة الحالة كاملة ←</span>
               </Link>
             ))}
           </div>
@@ -257,15 +244,15 @@ export default function ArabicHome() {
           </div>
         </section>
 
-        {/* ---- deeper pages (English) ---- */}
+        {/* ---- deeper pages ---- */}
         <section className="px-5 pb-[10vh] sm:px-10">
           <p data-rv className="eyebrow mb-6">
-            ( <Ltr>06</Ltr> ) — للتعمّق أكثر (بالإنجليزية)
+            ( <Ltr>06</Ltr> ) — للتعمّق أكثر
           </p>
           <ul className="border-t border-line">
             {ar.pages.map((p) => (
               <li key={p.href} data-rv className="border-b border-line">
-                <Link href={p.href} hrefLang="en" data-transition={p.label} className="sweep group flex items-baseline justify-between gap-6 px-2 py-7 sm:px-4">
+                <Link href={p.href} data-transition={p.label} className="sweep group flex items-baseline justify-between gap-6 px-2 py-7 sm:px-4">
                   <span className="font-display text-[clamp(1.4rem,3vw,2.6rem)] font-bold">{p.label}</span>
                   <span className="text-2xl transition-transform duration-500 group-hover:rotate-45">←</span>
                 </Link>
@@ -276,53 +263,7 @@ export default function ArabicHome() {
       </main>
 
       {/* ---- contact ---- */}
-      <footer id="contact" lang="ar" dir="rtl" className="relative overflow-hidden px-5 pb-10 pt-[16vh] sm:px-10">
-        <div className="pointer-events-none absolute -bottom-1/2 left-1/2 h-[90vh] w-[90vh] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(76,195,255,.22),rgba(182,156,255,.12)_40%,transparent_70%)] blur-2xl" />
-        <p data-rv className="eyebrow mb-8">
-          ( <Ltr>07</Ltr> ) — تواصل
-        </p>
-        <h2 data-rv className="font-display text-[clamp(3rem,10vw,9.5rem)] font-extrabold leading-[1.1]">
-          لنجعله <span className="text-gradient">سريعًا.</span>
-        </h2>
-        <div className="relative mt-14 grid gap-10 md:grid-cols-2 md:items-end">
-          <div data-rv>
-            <p className="max-w-[44ch] text-lg leading-loose text-ink/80">
-              {ar.role} · <Ltr>{profile.stackLine}</Ltr>. {ar.availability}.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <a href={`mailto:${profile.email}`} data-magnetic className="rounded-full bg-ink px-7 py-4 font-medium text-bg transition-colors hover:bg-cyan">
-                <Ltr>{profile.email}</Ltr>
-              </a>
-              <a
-                href={profile.cv}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-magnetic
-                className="rounded-full border border-line px-7 py-4 font-medium transition-colors hover:border-ink"
-              >
-                السيرة الذاتية ↗
-              </a>
-            </div>
-          </div>
-          <ul data-rv dir="ltr" className="flex flex-wrap gap-x-8 gap-y-3 md:justify-start">
-            {profile.links.map((l) => (
-              <li key={l.label}>
-                <a href={l.href} target="_blank" rel="noopener noreferrer" className="font-display text-2xl font-bold hover:text-cyan">
-                  {l.label} ↗
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="relative mt-24 flex flex-col gap-4 border-t border-line pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-          <span>
-            © <Ltr>{new Date().getFullYear()}</Ltr> {ar.name} · <Ltr>{profile.name}</Ltr>
-          </span>
-          <Link href="/" hrefLang="en" lang="en" data-transition="English" className="eyebrow hover:text-ink">
-            English version ↗
-          </Link>
-        </div>
-      </footer>
+      <ContactAr index="07" />
     </Motion>
   );
 }

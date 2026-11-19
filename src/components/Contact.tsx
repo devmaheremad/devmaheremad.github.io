@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap, scrollToId, SplitText } from "@/lib/motion";
 import { profile } from "@/content/site";
+import LangLink from "@/components/LangLink";
 
 export default function Contact({ index = "06" }: { index?: string }) {
   const root = useRef<HTMLElement>(null);
@@ -82,9 +82,7 @@ export default function Contact({ index = "06" }: { index?: string }) {
       <div className="mt-24 flex flex-col gap-4 border-t border-line pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
         <span>
           © {new Date().getFullYear()} {profile.name} ·{" "}
-          <Link href="/ar/" lang="ar" hrefLang="ar" data-transition="العربية" className="hover:text-ink">
-            ماهر المشهراوي
-          </Link>
+          <LangLink className="hover:text-ink">ماهر المشهراوي</LangLink>
         </span>
         <span className="eyebrow">Built with Next.js · React Three Fiber · GSAP</span>
         <button onClick={() => scrollToId("top")} className="eyebrow text-left sm:text-right">

@@ -1,22 +1,39 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import Liquid from "./Liquid";
-import { THEMES, companyBySlug, storyHref, type Story } from "@/content/stories";
+import { getContent } from "@/content/localized";
+import type { Story } from "@/content/stories";
+import { UI, localePath, type Lang } from "@/lib/i18n";
 
-export function Crumbs({ items }: { items: { name: string; href?: string }[] }) {
+// Numbers and Latin names stay left-to-right inside Arabic sentences.
+export const Ltr = ({ children }: { children: ReactNode }) => (
+  <bdi dir="ltr" className="inline-block">
+    {children}
+  </bdi>
+);
+
+/** A heading in two parts: plain text, then the part in the accent gradient. */
+export const Split = ({ t }: { t: readonly [string, string] }) => (
+  <>
+    {t[0]}
+    <span className="text-gradient">{t[1]}</span>
+  </>
+);
+
+export function Crumbs({ items, lang = "en" }: { items: { name: string; href?: string }[]; lang?: Lang }) {
   return (
-    <nav aria-label="Breadcrumb" data-hero-fade>
+    <nav aria-label={lang === "ar" ? "مسار التنقل" : "Breadcrumb"} data-hero-fade>
       <ol className="flex flex-wrap items-center gap-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-muted">
         <li>
-          <Link href="/" className="hover:text-ink">
-            Home
+          <Link href={localePath("/", lang)} className="hover:text-ink">
+            {UI[lang].home}
           </Link>
         </li>
         {items.map((it) => (
           <li key={it.name} className="flex items-center gap-2">
             <span aria-hidden>/</span>
             {it.href ? (
-              <Link href={it.href} className="hover:text-ink">
+              <Link href={localePath(it.href, lang)} className="hover:text-ink">
                 {it.name}
               </Link>
             ) : (
@@ -39,14 +56,17 @@ export function PageHero({
   meta,
   crumbs,
   tone = "mix",
+  lang = "en",
 }: {
   index: string;
   eyebrow: string;
   title: ReactNode;
   lead?: string;
   meta?: { label: string; value: string }[];
+  /** English paths; Arabic pages prefix them with /ar. */
   crumbs: { name: string; href?: string }[];
   tone?: "mix" | "cyan" | "violet";
+  lang?: Lang;
 }) {
   return (
     <section id="top" className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden px-5 pb-10 pt-28 sm:px-10">
@@ -54,12 +74,12 @@ export function PageHero({
       <span
         aria-hidden
         data-parallax="1.2"
-        className="text-outline pointer-events-none absolute -right-[2vw] top-[12vh] select-none font-display text-[clamp(10rem,34vw,34rem)] font-extrabold leading-none tracking-tighter"
+        className="text-outline pointer-events-none absolute -end-[2vw] top-[12vh] select-none font-display text-[clamp(10rem,34vw,34rem)] font-extrabold leading-none tracking-tighter"
       >
         {index}
       </span>
       <div className="relative">
-        <Crumbs items={crumbs} />
+        <Crumbs items={crumbs} lang={lang} />
         <p data-hero-fade className="eyebrow mt-10">
           {eyebrow}
         </p>
@@ -100,7 +120,7 @@ export function SectionHead({ index, label, title, aside }: { index: string; lab
         </h2>
       </div>
       {aside && (
-        <p data-rv className="eyebrow max-w-[30ch] md:text-right">
+        <p data-rv className="eyebrow max-w-[30ch] md:text-end">
           {aside}
         </p>
       )}
@@ -114,7 +134,8 @@ export function Chip({ children }: { children: ReactNode }) {
   );
 }
 
-export function ThemeChips({ story }: { story: Story }) {
+export function ThemeChips({ story, lang = "en" }: { story: Story; lang?: Lang }) {
+  const { THEMES } = getContent(lang);
   return (
     <div className="flex flex-wrap gap-2">
       {story.themes.map((t) => (
@@ -124,8 +145,9 @@ export function ThemeChips({ story }: { story: Story }) {
   );
 }
 
-// A full story, used on company pages: sticky number and title on the left, the story on the right.
-export function StoryRow({ story, n }: { story: Story; n: number }) {
+// A full story, used on company pages: sticky number and title on one side, the story on the other.
+export function StoryRow({ story, n, lang = "en" }: { story: Story; n: number; lang?: Lang }) {
+  const t = UI[lang];
   return (
     <article id={story.id} className="relative grid scroll-mt-28 gap-10 py-16 md:grid-cols-12 md:py-24">
       <span data-rv-line className="absolute inset-x-0 top-0 h-px bg-line" />
@@ -137,32 +159,35 @@ export function StoryRow({ story, n }: { story: Story; n: number }) {
           {story.title}
         </h3>
         <div data-rv className="mt-6">
-          <ThemeChips story={story} />
+          <ThemeChips story={story} lang={lang} />
         </div>
       </header>
       <div className="space-y-10 md:col-span-6 md:col-start-7">
-        <Beat label="The problem" text={story.problem} />
-        <Beat label="What I did" text={story.action} />
-        <Beat label="Result" text={story.result} strong />
+        <Beat label={t.problem} text={story.problem} />
+        <Beat label={t.action} text={story.action} />
+        <Beat label={t.result} text={story.result} strong />
         {story.decision && (
           <div data-rv data-spot className="spot rounded-2xl border border-line bg-bg-2/70 p-6">
-            <p className="eyebrow mb-3">The call</p>
+            <p className="eyebrow mb-3">{t.call}</p>
             <p className="font-display text-xl font-bold">{story.decision.call}</p>
-            <p className="mt-2 text-sm text-muted">Instead of: {story.decision.instead}</p>
+            <p className="mt-2 text-sm text-muted">
+              {t.insteadOf}
+              {story.decision.instead}
+            </p>
             <p className="mt-4 leading-relaxed text-ink/80">{story.decision.why}</p>
           </div>
         )}
-        <p data-rv className="border-l-2 border-cyan/70 pl-5 font-display text-[clamp(1.25rem,2vw,1.7rem)] font-bold leading-snug">
+        <p data-rv className="border-s-2 border-cyan/70 ps-5 font-display text-[clamp(1.25rem,2vw,1.7rem)] font-bold leading-snug">
           {story.lesson}
         </p>
         {story.caseStudy && (
           <Link
             data-rv
-            href={`/case-studies/${story.caseStudy}/`}
+            href={localePath(`/case-studies/${story.caseStudy}/`, lang)}
             className="group inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.18em] text-cyan"
           >
-            Read the full case study
-            <span className="transition-transform duration-500 group-hover:translate-x-2">→</span>
+            {t.readCaseStudy}
+            <span className={`transition-transform duration-500 ${lang === "ar" ? "group-hover:-translate-x-2" : "group-hover:translate-x-2"}`}>{t.arrow}</span>
           </Link>
         )}
       </div>
@@ -180,42 +205,54 @@ function Beat({ label, text, strong }: { label: string; text: string; strong?: b
 }
 
 // A compact story card for grids: links to the full story on its company page.
-export function StoryCard({ story, n }: { story: Story; n?: number }) {
+export function StoryCard({ story, n, lang = "en" }: { story: Story; n?: number; lang?: Lang }) {
+  const { companyBySlug, storyHref } = getContent(lang);
+  const t = UI[lang];
   const c = companyBySlug(story.company);
   return (
     <Link
       href={storyHref(story)}
       data-spot
-      data-cursor="Read"
+      data-cursor={t.cursorRead}
       data-transition={c.name}
       className="spot group flex h-full flex-col rounded-3xl border border-line bg-bg-2/60 p-7 transition-colors duration-500 hover:border-transparent"
     >
       <div className="flex items-baseline justify-between gap-4">
-        <span className="eyebrow">{n !== undefined ? `S/${String(n).padStart(2, "0")}` : c.short}</span>
+        <span className="eyebrow">{n !== undefined ? t.storyLabel(n) : c.short}</span>
         <span className="eyebrow">{c.name}</span>
       </div>
       <h3 className="mt-8 font-display text-2xl font-bold leading-tight tracking-tight">{story.title}</h3>
       <p className="mt-4 text-[0.95rem] leading-relaxed text-ink/70">{story.problem}</p>
       <p className="mt-4 text-[0.95rem] leading-relaxed">
-        <span className="text-gradient font-semibold">Result. </span>
+        <span className="text-gradient font-semibold">{t.resultShort}</span>
         {story.result}
       </p>
       <div className="mt-auto flex items-end justify-between gap-4 pt-8">
-        <ThemeChips story={story} />
-        <span className="text-xl transition-transform duration-500 group-hover:-rotate-45">→</span>
+        <ThemeChips story={story} lang={lang} />
+        <span className={`text-xl transition-transform duration-500 ${lang === "ar" ? "group-hover:rotate-45" : "group-hover:-rotate-45"}`}>{t.arrow}</span>
       </div>
     </Link>
   );
 }
 
-export function NextChapter({ href, eyebrow, title }: { href: string; eyebrow: string; title: string }) {
+export function NextChapter({ href, eyebrow, title, lang = "en" }: { href: string; eyebrow: string; title: string; lang?: Lang }) {
+  const ar = lang === "ar";
   return (
-    <Link href={href} data-transition={title} data-cursor="Next" className="sweep group block border-y border-line px-5 py-16 sm:px-10 sm:py-24">
+    <Link
+      href={localePath(href, lang)}
+      data-transition={title}
+      data-cursor={UI[lang].cursorNext}
+      className="sweep group block border-y border-line px-5 py-16 sm:px-10 sm:py-24"
+    >
       <p className="eyebrow transition-colors duration-500 group-hover:text-bg">{eyebrow}</p>
       <p className="mt-6 flex items-end justify-between gap-6 font-display text-[clamp(2.8rem,9vw,9.5rem)] font-extrabold leading-[0.9] tracking-tighter">
         <span>{title}</span>
-        <span className="shrink-0 text-[0.6em] transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-3 group-hover:-rotate-45">
-          →
+        <span
+          className={`shrink-0 text-[0.6em] transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${
+            ar ? "group-hover:-translate-x-3 group-hover:rotate-45" : "group-hover:translate-x-3 group-hover:-rotate-45"
+          }`}
+        >
+          {UI[lang].arrow}
         </span>
       </p>
     </Link>

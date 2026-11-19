@@ -15,6 +15,8 @@ smooth scrolling and scroll-driven animation, kept fast: Lighthouse 90+ performa
 - **Motion:** GSAP (ScrollTrigger, SplitText) driven by Lenis smooth scroll on one ticker. Pinned horizontal gallery,
   scroll-scrubbed word reveal, velocity-skewed marquee, magnetic buttons and a custom blend-mode cursor.
 - **Content** lives in `src/content/site.ts` and comes from the CV only.
+- **Two languages:** every page exists in English and in Arabic under `/ar/` (right-to-left, Arabic fonts). Pages are
+  built once in `src/views/` and rendered per language; the Arabic text is in `src/content/stories.ar.ts` and `ar.ts`.
 - **Static export** (`output: "export"`), deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
 
 ## Run locally

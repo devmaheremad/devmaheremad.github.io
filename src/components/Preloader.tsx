@@ -1,11 +1,13 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { gsap, READY_EVENT } from "@/lib/motion";
+import { isArPath } from "@/lib/i18n";
 
 // Counter 000 → 100 while fonts load, then two panels split away and the intro plays.
 export default function Preloader() {
-
+  const isAr = isArPath(usePathname());
   const root = useRef<HTMLDivElement>(null);
   const count = useRef<HTMLSpanElement>(null);
   const bar = useRef<HTMLDivElement>(null);
@@ -47,7 +49,7 @@ export default function Preloader() {
 
   if (gone) return null;
   return (
-    <div ref={root} role="status" aria-label="Loading" className="fixed inset-0 z-[70] pointer-events-auto">
+    <div ref={root} role="status" aria-label={isAr ? "جارٍ التحميل" : "Loading"} className="fixed inset-0 z-[70] pointer-events-auto">
       <div className="pl-top absolute inset-x-0 top-0 h-1/2 bg-bg-2" />
       <div className="pl-bottom absolute inset-x-0 bottom-0 h-1/2 bg-bg-2" />
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
@@ -57,7 +59,13 @@ export default function Preloader() {
         <div className="pl-meta h-px w-[min(60vw,420px)] bg-line overflow-hidden">
           <div ref={bar} className="h-full w-full origin-left bg-gradient-to-r from-cyan to-violet" style={{ transform: "scaleX(0)" }} />
         </div>
-        <span className="pl-meta eyebrow">Compiling the experience</span>
+        {isAr ? (
+          <span lang="ar" className="pl-meta eyebrow font-ar text-sm">
+            نجهّز التجربة
+          </span>
+        ) : (
+          <span className="pl-meta eyebrow">Compiling the experience</span>
+        )}
       </div>
     </div>
   );

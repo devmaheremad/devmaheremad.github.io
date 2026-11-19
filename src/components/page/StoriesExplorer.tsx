@@ -1,13 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/motion";
-import { THEMES, companies, stories, type CompanySlug, type Theme } from "@/content/stories";
-import { StoryCard } from "./ui";
+import { storiesCount, type Lang } from "@/lib/i18n";
 
-type Filter = { company: CompanySlug | "all"; theme: Theme | "all" };
+// The cards are rendered on the server in the page's language and passed in; this component only filters them.
+export type ExplorerItem = { id: string; company: string; themes: string[]; card: ReactNode };
+type Filter = { company: string; theme: string };
 
-function Pill({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+const LABELS: Record<Lang, { company: string; theme: string; all: string }> = {
+  en: { company: "Company", theme: "Theme", all: "All" },
+  ar: { company: "الشركة", theme: "الموضوع", all: "الكل" },
+};
+
+function Pill({ active, onClick, children }: { active: boolean; onClick: () => void; children: ReactNode }) {
   return (
     <button
       onClick={onClick}
@@ -21,12 +27,23 @@ function Pill({ active, onClick, children }: { active: boolean; onClick: () => v
   );
 }
 
-export default function StoriesExplorer() {
+export default function StoriesExplorer({
+  items,
+  companies,
+  themes,
+  lang = "en",
+}: {
+  items: ExplorerItem[];
+  companies: { slug: string; name: string }[];
+  themes: { key: string; short: string }[];
+  lang?: Lang;
+}) {
+  const t = LABELS[lang];
   const [f, setF] = useState<Filter>({ company: "all", theme: "all" });
   const grid = useRef<HTMLUListElement>(null);
   const list = useMemo(
-    () => stories.filter((s) => (f.company === "all" || s.company === f.company) && (f.theme === "all" || s.themes.includes(f.theme))),
-    [f],
+    () => items.filter((s) => (f.company === "all" || s.company === f.company) && (f.theme === "all" || s.themes.includes(f.theme))),
+    [f, items],
   );
 
   useEffect(() => {
@@ -40,9 +57,9 @@ export default function StoriesExplorer() {
     <div>
       <div className="mb-12 space-y-4">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="eyebrow mr-2 w-20">Company</span>
+          <span className="eyebrow me-2 w-20">{t.company}</span>
           <Pill active={f.company === "all"} onClick={() => setF({ ...f, company: "all" })}>
-            All
+            {t.all}
           </Pill>
           {companies.map((c) => (
             <Pill key={c.slug} active={f.company === c.slug} onClick={() => setF({ ...f, company: c.slug })}>
@@ -51,25 +68,23 @@ export default function StoriesExplorer() {
           ))}
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="eyebrow mr-2 w-20">Theme</span>
+          <span className="eyebrow me-2 w-20">{t.theme}</span>
           <Pill active={f.theme === "all"} onClick={() => setF({ ...f, theme: "all" })}>
-            All
+            {t.all}
           </Pill>
-          {(Object.keys(THEMES) as Theme[]).map((t) => (
-            <Pill key={t} active={f.theme === t} onClick={() => setF({ ...f, theme: t })}>
-              {THEMES[t].short}
+          {themes.map((th) => (
+            <Pill key={th.key} active={f.theme === th.key} onClick={() => setF({ ...f, theme: th.key })}>
+              {th.short}
             </Pill>
           ))}
         </div>
         <p className="eyebrow pt-2" aria-live="polite">
-          {list.length} {list.length === 1 ? "story" : "stories"}
+          {storiesCount(list.length, lang)}
         </p>
       </div>
       <ul ref={grid} className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {list.map((s) => (
-          <li key={s.id}>
-            <StoryCard story={s} n={stories.indexOf(s) + 1} />
-          </li>
+          <li key={s.id}>{s.card}</li>
         ))}
       </ul>
     </div>

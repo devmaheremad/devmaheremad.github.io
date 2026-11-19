@@ -34,13 +34,25 @@ function flatten(pageDir, segDir) {
 walk(OUT);
 console.log(`flatten-segments: ${copied} prefetch files copied to their dotted names`);
 
-// One root layout renders <html lang="en">. The Arabic page's static HTML must say lang="ar" dir="rtl" for search
-// engines and screen readers; the root layout has suppressHydrationWarning, and LangSync handles client navigation.
-const AR = join(OUT, "ar", "index.html");
+// One root layout renders <html lang="en">. Every Arabic page's static HTML (out/ar/**/index.html) must say
+// lang="ar" dir="rtl" for search engines and screen readers; the root layout has suppressHydrationWarning, and
+// LangSync handles client navigation.
+function arabicPages(dir) {
+  return readdirSync(dir).flatMap((name) => {
+    const p = join(dir, name);
+    if (statSync(p).isDirectory()) return name.startsWith("__next.") ? [] : arabicPages(p);
+    return name === "index.html" ? [p] : [];
+  });
+}
+
+const AR = join(OUT, "ar");
 if (existsSync(AR)) {
-  const html = readFileSync(AR, "utf8");
-  const fixed = html.replace(/<html lang="en"/, '<html lang="ar" dir="rtl"');
-  if (fixed === html) throw new Error('flatten-segments: <html lang="en" not found in out/ar/index.html');
-  writeFileSync(AR, fixed);
-  console.log("flatten-segments: out/ar/index.html set to lang=ar dir=rtl");
+  const files = arabicPages(AR);
+  for (const file of files) {
+    const html = readFileSync(file, "utf8");
+    const fixed = html.replace(/<html lang="en"/, '<html lang="ar" dir="rtl"');
+    if (fixed === html) throw new Error(`flatten-segments: <html lang="en" not found in ${file}`);
+    writeFileSync(file, fixed);
+  }
+  console.log(`flatten-segments: ${files.length} Arabic pages set to lang=ar dir=rtl`);
 }

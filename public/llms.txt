@@ -30,6 +30,7 @@ React, Next.js, TypeScript, JavaScript (ES6+), HTML5, CSS3, Sass, Material UI, T
 - [Strengths](https://devmaheremad.com/strengths/)
 - [Decisions](https://devmaheremad.com/decisions/)
 - [Stories](https://devmaheremad.com/stories/)
+- Every page also exists in Arabic under /ar/: [الفصول](https://devmaheremad.com/ar/work/), [دراسات الحالة](https://devmaheremad.com/ar/case-studies/), [نقاط القوة](https://devmaheremad.com/ar/strengths/), [القرارات](https://devmaheremad.com/ar/decisions/), [القصص](https://devmaheremad.com/ar/stories/)
 
 ## Contact
 - Email: hello@devmaheremad.com
