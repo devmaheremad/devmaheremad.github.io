@@ -1,0 +1,16 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: "Syne"; src: url("file:///C:/Projects/maher-portfolio/public/fonts/syne-800.woff") format("woff"); font-weight: 800; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 512px; height: 512px; overflow: hidden; background: transparent; }
+.tile { position: absolute; inset: 0; border-radius: 0; overflow: hidden; background: #07070a;
+   }
+.glow { position: absolute; border-radius: 50%; filter: blur(40px); }
+.g1 { width: 420px; height: 420px; right: -170px; top: -190px; background: radial-gradient(circle, rgba(76,195,255,.55), transparent 65%); }
+.g2 { width: 420px; height: 420px; left: -190px; bottom: -210px; background: radial-gradient(circle, rgba(182,156,255,.45), transparent 65%); }
+.m { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center;
+  font-family: "Syne", sans-serif; font-weight: 800; font-size: 228px; letter-spacing: 0; color: #ecebe6; line-height: 1; padding-bottom: 6px; padding-left: 14px; }
+.dot { color: #4cc3ff; margin-left: 6px; }
+</style></head>
+<body><div class="tile"><div class="glow g1"></div><div class="glow g2"></div><div class="m">M<span class="dot">.</span></div></div></body></html>

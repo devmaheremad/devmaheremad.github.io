@@ -21,7 +21,7 @@ const HANDLE = "devmaheremad";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: { default: `${profile.name} (${HANDLE}) — ${profile.role}`, template: `%s — ${profile.name}` },
-  description: "Maher Almashharawi (devmaheremad), Senior Frontend Engineer: fast, accessible React and Next.js frontends for SaaS, e-commerce and booking. 5+ years, remote.",
+  description: "Senior Frontend Engineer with 5+ years building fast, accessible React and Next.js products for SaaS, e-commerce and booking. Remote, hybrid or on-site.",
   applicationName: profile.name,
   authors: [{ name: profile.name, url: SITE }],
   creator: profile.name,
@@ -62,7 +62,32 @@ const structuredData = {
       knowsLanguage: ["ar", "en", "de"],
       alumniOf: { "@type": "CollegeOrUniversity", name: "Islamic University of Gaza", alternateName: "الجامعة الإسلامية بغزة" },
       subjectOf: { "@id": `${SITE}/ar/#profilepage` },
-      knowsAbout: ["React", "Next.js", "TypeScript", "JavaScript", "Frontend architecture", "Web performance", "Core Web Vitals", "Accessibility", "Design systems"],
+      // The names recruiters and AI assistants search for, in English and Arabic. Every one is the CV's title or field.
+      hasOccupation: {
+        "@type": "Occupation",
+        name: profile.role,
+        alternateName: [
+          "Frontend Engineer",
+          "Frontend Developer",
+          "Senior Frontend Developer",
+          "React Developer",
+          "Next.js Developer",
+          "TypeScript Developer",
+          "مهندس برمجيات أول",
+          "مطوّر واجهات أمامية",
+          "مطوّر Frontend",
+          "مطوّر React",
+          "مطوّر Next.js",
+        ],
+        occupationalCategory: "15-1254.00 Web Developers",
+        skills: "React, Next.js, TypeScript, JavaScript, Material UI, Tailwind CSS, Redux Toolkit, Zustand, REST APIs, Core Web Vitals, Lighthouse, accessibility (WCAG), SEO, React Testing Library",
+      },
+      knowsAbout: [
+        "React", "Next.js", "TypeScript", "JavaScript", "Frontend architecture", "Web performance", "Core Web Vitals", "Accessibility",
+        "Design systems", "SaaS platforms", "Multi-store e-commerce", "E-commerce storefronts", "Booking systems", "Ticket booking",
+        "Dashboards", "REST API integration", "State management", "Frontend testing", "SEO",
+        "منصات SaaS", "المتاجر الإلكترونية", "أنظمة الحجز", "تطوير الواجهات الأمامية",
+      ],
       sameAs: profile.links.map((l) => l.href),
     },
     {

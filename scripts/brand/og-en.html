@@ -1,0 +1,35 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: "Syne"; src: url("file:///C:/Projects/maher-portfolio/public/fonts/syne-800.woff") format("woff"); font-weight: 800; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1200px; height: 630px; overflow: hidden; background: #07070a; }
+body { position: relative; color: #ecebe6; font-family: "Segoe UI", system-ui, sans-serif; }
+.glow { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .55; }
+.g1 { width: 520px; height: 520px; right: -120px; top: -160px; background: radial-gradient(circle, #4cc3ff 0%, transparent 65%); }
+.g2 { width: 460px; height: 460px; right: 120px; bottom: -260px; background: radial-gradient(circle, #b69cff 0%, transparent 65%); }
+.orb { position: absolute; right: 90px; top: 150px; width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.55), rgba(76,195,255,.35) 22%, rgba(182,156,255,.28) 55%, rgba(7,7,10,.2) 75%);
+  box-shadow: inset -30px -40px 80px rgba(7,7,10,.6), 0 0 120px rgba(76,195,255,.25); }
+.wrap { position: absolute; inset: 64px 72px; display: flex; flex-direction: column; }
+.label { font-family: Consolas, "Cascadia Mono", monospace; font-size: 20px; letter-spacing: .18em; text-transform: uppercase; color: #8b8b95; }
+.name { margin-top: 56px; font-family: "Syne", sans-serif; font-weight: 800; font-size: 84px; line-height: .95; letter-spacing: -.02em; max-width: 760px; }
+.name .dot { color: #4cc3ff; }
+.role { margin-top: 26px; font-family: "Syne", sans-serif; font-weight: 800; font-size: 44px; letter-spacing: -.01em;
+  background: linear-gradient(100deg, #4cc3ff, #b69cff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.stack { margin-top: 22px; font-size: 26px; color: #c9c8c2; max-width: 720px; line-height: 1.35; }
+.foot { margin-top: auto; display: flex; align-items: center; gap: 14px; font-family: Consolas, "Cascadia Mono", monospace;
+  font-size: 20px; letter-spacing: .14em; text-transform: uppercase; color: #ecebe6; }
+.live { width: 14px; height: 14px; border-radius: 50%; background: #34d399; box-shadow: 0 0 18px #34d399; }
+.sep { color: #8b8b95; }
+</style></head>
+<body>
+  <div class="glow g1"></div><div class="glow g2"></div><div class="orb"></div>
+  <div class="wrap">
+    <div class="label">( Portfolio ) — devmaheremad.com</div>
+    <div class="name">Maher Almashharawi<span class="dot">.</span></div>
+    <div class="role">Senior Frontend Engineer</div>
+    <div class="stack">React · Next.js · TypeScript. Fast, accessible frontends for SaaS, e-commerce and booking products.</div>
+    <div class="foot"><span class="live"></span>Available now <span class="sep">·</span> Remote, hybrid or on-site <span class="sep">·</span> Open to relocation</div>
+  </div>
+</body></html>

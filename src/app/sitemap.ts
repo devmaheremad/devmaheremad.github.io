@@ -6,7 +6,9 @@ export const dynamic = "force-static";
 const SITE = "https://devmaheremad.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const page = (path: string, priority: number) => ({ url: `${SITE}${path}`, changeFrequency: "monthly" as const, priority });
+  // lastModified = build time, so crawlers see that the pages changed after each deploy.
+  const lastModified = new Date();
+  const page = (path: string, priority: number) => ({ url: `${SITE}${path}`, lastModified, changeFrequency: "monthly" as const, priority });
   const languages = { en: `${SITE}/`, ar: `${SITE}/ar/` };
   return [
     { ...page("/", 1), alternates: { languages } },

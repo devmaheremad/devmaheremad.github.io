@@ -25,6 +25,9 @@ npm run dev
 
 ## Scripts
 - `python scripts/capture.py [name ...]` refreshes the project screenshots in `public/work/` with headless Edge.
+- `scripts/brand/` holds the HTML sources of the link previews (`og-en.html`, `og-ar.html`) and the "M." icon
+  (`icon.html`, `icon-square.html` for Apple). Render them with headless Edge at 1200×630 or 512×512; the icon becomes
+  `src/app/favicon.ico` (16, 32, 48), `src/app/icon.png` (192) and `src/app/apple-icon.png` (180, from the square one).
 
 ## Stack
 Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Three.js · React Three Fiber · drei · GSAP · Lenis

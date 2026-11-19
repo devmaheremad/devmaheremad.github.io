@@ -16,7 +16,7 @@ export const OG_AR = {
   url: "/og/ar.png",
   width: 1200,
   height: 630,
-  alt: "ماهر المشهراوي (Maher Almashharawi)، مهندس واجهات أمامية أول. React وNext.js وTypeScript. devmaheremad.com",
+  alt: "ماهر المشهراوي (Maher Almashharawi)، مهندس برمجيات أول · Senior Frontend Engineer. React وNext.js وTypeScript. devmaheremad.com",
 };
 
 // Every spelling people search for: the Arabic name, the handle, and the hyphenated forms.

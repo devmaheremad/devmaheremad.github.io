@@ -1,0 +1,38 @@
+# Maher Almashharawi (ماهر المشهراوي)
+
+> Senior Frontend Engineer (مهندس برمجيات أول متخصص في الواجهات الأمامية) with 5+ years building fast, accessible React, Next.js and TypeScript frontends for SaaS, e-commerce and booking products. Online handle: devmaheremad. Based in Palestine. Available now: remote, hybrid or on-site, open to relocation.
+
+## Highlights
+- Took an application from about 55% to 95%+ on Lighthouse (rendering optimization, code splitting, caching, asset optimization).
+- Built and launched a FIFA World Cup Qatar 2022 ticket-booking experience that supported about $20,000 in revenue per match event.
+- Advocated Next.js as the foundation of KoninPay, a multi-store SaaS platform, with a written technical comparison; seven live storefronts run on it.
+- Delivered e-commerce storefronts with 95%+ Lighthouse scores across performance, accessibility, SEO, best practices and PWA readiness.
+- Held end-to-end frontend responsibility for Beljwar, a multi-category booking platform; delivered 10+ booking and business websites.
+
+## Experience
+- Senior Frontend Developer, Konin Cloud (May 2023 to Sep 2025, remote): KoninPay multi-store SaaS, merchant and store creation, payments, digital wallet.
+- Senior Frontend Developer, The Sailors (Jan 2022 to Dec 2023, Saudi Arabia, remote): World Cup ticket booking, e-commerce storefronts, venue seat selection.
+- Frontend Developer, Mars Innovation Technology (Jan 2021 to Dec 2021, UAE, remote): Beljwar booking platform, React and Material UI dashboards.
+- Internship Trainee, Gaza Sky Geeks (Jan 2020 to Aug 2020).
+
+## Skills
+React, Next.js, TypeScript, JavaScript (ES6+), HTML5, CSS3, Sass, Material UI, Tailwind CSS, Redux Toolkit, Zustand, REST APIs, component-based architecture, state management, Core Web Vitals, Lighthouse, code splitting, lazy loading, caching, accessibility (WCAG), SEO, PWA, responsive design, React Testing Library, integration and end-to-end testing, Git, Figma.
+
+## Education and languages
+- Bachelor of Engineering, Islamic University of Gaza (2014 to 2019).
+- Arabic (native), English (full professional proficiency), German (elementary).
+
+## Pages
+- [Home](https://devmaheremad.com/): profile, work, case studies, contact
+- [الصفحة العربية](https://devmaheremad.com/ar/): the profile in Arabic
+- [Work](https://devmaheremad.com/work/): one chapter per company
+- [Case studies](https://devmaheremad.com/case-studies/): Lighthouse 55% to 95%+, World Cup ticket booking, Next.js for a multi-store SaaS
+- [Strengths](https://devmaheremad.com/strengths/)
+- [Decisions](https://devmaheremad.com/decisions/)
+- [Stories](https://devmaheremad.com/stories/)
+
+## Contact
+- Email: hello@devmaheremad.com
+- LinkedIn: https://www.linkedin.com/in/devmaheremad
+- GitHub: https://github.com/devmaheremad
+- X: https://x.com/devmaheremad

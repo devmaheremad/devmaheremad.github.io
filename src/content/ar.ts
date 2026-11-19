@@ -3,15 +3,17 @@
 
 export const ar = {
   name: "ماهر المشهراوي",
-  role: "مهندس واجهات أمامية أول",
-  title: "ماهر المشهراوي — مهندس واجهات أمامية أول | Senior Frontend Engineer",
+  // The Arabic title (owner, 2026-11-19): "مهندس برمجيات أول", always next to the English "Senior Frontend Engineer"
+  // or followed by "متخصص في الواجهات الأمامية". Never "مهندس واجهات أمامية أول".
+  role: "مهندس برمجيات أول",
+  title: "ماهر المشهراوي | مهندس برمجيات أول · Senior Frontend Engineer",
   description:
-    "ماهر المشهراوي (Maher Almashharawi)، مهندس واجهات أمامية أول من فلسطين: واجهات React وNext.js سريعة لمنتجات SaaS والتجارة الإلكترونية والحجز. خبرة +5 سنوات.",
+    "ماهر المشهراوي، مهندس برمجيات أول متخصص في الواجهات الأمامية: React وNext.js وTypeScript. خبرة +5 سنوات في منصات SaaS والتجارة الإلكترونية وأنظمة الحجز. متاح للعمل.",
   intro:
     "أبني واجهات React وNext.js سريعة وتراعي إمكانية الوصول، لمنتجات SaaS والتجارة الإلكترونية وأنظمة الحجز. خبرة تزيد على 5 سنوات، وأعمل عن بُعد.",
   availability: "متاح الآن · عن بُعد أو هجين أو من المكتب · منفتح على الانتقال",
   about: [
-    "ماهر المشهراوي (Maher Almashharawi) مهندس واجهات أمامية أول (Senior Frontend Engineer) من فلسطين، ومطوّر React وNext.js وTypeScript. اسمي على الإنترنت devmaheremad.",
+    "ماهر المشهراوي (Maher Almashharawi) مهندس برمجيات أول متخصص في الواجهات الأمامية (Senior Frontend Engineer) من فلسطين، أعمل بـ React وNext.js وTypeScript. اسمي على الإنترنت devmaheremad.",
     "عملت مع شركات في السعودية والإمارات وعن بُعد، وبنيت منصات SaaS ومتاجر إلكترونية وأنظمة حجز، من أول شاشة حتى الإنتاج.",
   ],
   manifesto:
@@ -27,7 +29,7 @@ export const ar = {
     {
       company: "Konin Cloud",
       slug: "konin-cloud",
-      role: "مطوّر واجهات أمامية أول",
+      role: "Senior Frontend Developer",
       period: "مايو 2023 — سبتمبر 2025",
       place: "عن بُعد",
       points: [
@@ -40,7 +42,7 @@ export const ar = {
     {
       company: "The Sailors",
       slug: "the-sailors",
-      role: "مطوّر واجهات أمامية أول",
+      role: "Senior Frontend Developer",
       period: "يناير 2022 — ديسمبر 2023",
       place: "السعودية · عن بُعد",
       points: [
@@ -53,7 +55,7 @@ export const ar = {
     {
       company: "Mars Innovation Technology",
       slug: "mars-innovation-technology",
-      role: "مطوّر واجهات أمامية",
+      role: "Frontend Developer",
       period: "يناير 2021 — ديسمبر 2021",
       place: "الإمارات · عن بُعد",
       points: [
