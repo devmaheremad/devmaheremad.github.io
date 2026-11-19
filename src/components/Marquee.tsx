@@ -48,7 +48,8 @@ export default function Marquee() {
   );
 
   return (
-    <section ref={root} aria-label="Tech stack" className="overflow-hidden py-16">
+    // Tool names, so left to right on the Arabic page too (the loop is built for that direction).
+    <section ref={root} aria-label="Tech stack" lang="en" dir="ltr" className="overflow-hidden py-16">
       {row("a", false)}
       {row("b", true)}
     </section>

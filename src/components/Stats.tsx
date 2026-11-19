@@ -2,9 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/motion";
-import { stats } from "@/content/site";
+type Stat = { value: number; prefix: string; suffix: string; label: string };
 
-export default function Stats() {
+export default function Stats({ items }: { items: Stat[] }) {
   const root = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -35,14 +35,17 @@ export default function Stats() {
   return (
     <section ref={root} className="border-y border-line px-5 py-16 sm:px-10">
       <ul className="grid grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-3 xl:grid-cols-5">
-        {stats.map((s) => (
+        {items.map((s) => (
           <li key={s.label} className="st-item">
             <p className="font-display text-[clamp(2.6rem,5vw,4.8rem)] font-extrabold leading-none tracking-tight">
-              <span className="text-gradient">{s.prefix}</span>
-              <span className="st-num tabular-nums" data-value={s.value}>
-                {s.value}
-              </span>
-              <span className="text-gradient">{s.suffix}</span>
+              {/* Left to right on the Arabic page too, or "5+" would read "+5". */}
+              <bdi dir="ltr">
+                <span className="text-gradient">{s.prefix}</span>
+                <span className="st-num tabular-nums" data-value={s.value}>
+                  {s.value}
+                </span>
+                <span className="text-gradient">{s.suffix}</span>
+              </bdi>
             </p>
             <p className="mt-3 max-w-[20ch] text-sm leading-snug text-muted">{s.label}</p>
           </li>

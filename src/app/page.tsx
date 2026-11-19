@@ -8,18 +8,21 @@ import Experience from "@/components/Experience";
 import GoDeeper from "@/components/GoDeeper";
 import Marquee from "@/components/Marquee";
 import Contact from "@/components/Contact";
+import { homeContent } from "@/content/home";
 
+// The Arabic homepage (src/app/ar/page.tsx) renders these same sections, in the same order.
 export default function Home() {
+  const c = homeContent("en");
   return (
     <>
       <main>
-        <Hero />
-        <Manifesto />
-        <Stats />
+        <Hero intro={c.intro} />
+        <Manifesto text={c.manifesto} />
+        <Stats items={c.stats} />
         <Storefronts />
-        <Work />
-        <CaseStudies />
-        <Experience />
+        <Work groups={c.workGroups} />
+        <CaseStudies items={c.caseStudies} />
+        <Experience items={c.experience} />
         <GoDeeper />
         <Marquee />
       </main>

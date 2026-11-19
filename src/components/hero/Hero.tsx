@@ -4,10 +4,26 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { gsap, onReady, scrollToId, SplitText } from "@/lib/motion";
 import { profile } from "@/content/site";
+import type { Lang } from "@/lib/i18n";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
 const HOLD_SECONDS = 1.6;
+
+const T = {
+  en: {
+    role: profile.role,
+    place: [profile.location, "Remote · Open to relocation"],
+    hold: ["Press & hold", "to dive in"],
+    cursor: "Hold",
+  },
+  ar: {
+    role: "مهندس برمجيات أول",
+    place: ["فلسطين", "عن بُعد · منفتح على الانتقال"],
+    hold: ["اضغط مطوّلًا", "للانتقال إلى الأعمال"],
+    cursor: "اضغط",
+  },
+};
 
 // Live WebGL only with a real GPU. Software renderers (SwiftShader, llvmpipe: headless browsers, Lighthouse,
 // PageSpeed Insights, very old machines) get a CSS version of the scene instead, which costs almost nothing.
@@ -29,7 +45,8 @@ function hasWebGL() {
 }
 const noSubscribe = () => () => {};
 
-export default function Hero() {
+export default function Hero({ lang = "en", intro }: { lang?: Lang; intro: string }) {
+  const t = T[lang];
   const section = useRef<HTMLElement>(null);
   const power = useRef(0);
   const ring = useRef<SVGCircleElement>(null);
@@ -43,19 +60,21 @@ export default function Hero() {
     return () => io.disconnect();
   }, []);
 
-  // Intro: lines rise out of their masks once the preloader is gone.
+  // Intro: lines rise out of their masks once the preloader is gone. Arabic is not split (it would break the joined
+  // script), so there the line fades up with the rest.
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const split = new SplitText(".hero-line", { type: "lines", mask: "lines", linesClass: "line", aria: "none" });
-      gsap.set(split.lines, { yPercent: 110 });
-      gsap.set(".hero-fade", { opacity: 0, y: 16 });
+      const split = lang === "ar" ? null : new SplitText(".hero-line", { type: "lines", mask: "lines", linesClass: "line", aria: "none" });
+      if (split) gsap.set(split.lines, { yPercent: 110 });
+      const fade = lang === "ar" ? ".hero-line, .hero-fade" : ".hero-fade";
+      gsap.set(fade, { opacity: 0, y: 16 });
       return onReady(() => {
-        gsap.to(split.lines, { yPercent: 0, duration: 1.4, ease: "expo.out", stagger: 0.08 });
-        gsap.to(".hero-fade", { opacity: 1, y: 0, duration: 1.2, ease: "expo.out", stagger: 0.06, delay: 0.4 });
+        if (split) gsap.to(split.lines, { yPercent: 0, duration: 1.4, ease: "expo.out", stagger: 0.08 });
+        gsap.to(fade, { opacity: 1, y: 0, duration: 1.2, ease: "expo.out", stagger: 0.06, delay: 0.4 });
       });
     }, section);
     return () => ctx.revert();
-  }, []);
+  }, [lang]);
 
   // Press & hold: power rises to 1, the glass overdrives, then the page dives into the work.
   useEffect(() => {
@@ -96,7 +115,7 @@ export default function Hero() {
     <section
       ref={section}
       id="top"
-      data-cursor="Hold"
+      data-cursor={t.cursor}
       className="relative h-[100svh] min-h-[620px] w-full overflow-hidden select-none"
     >
       <div className="absolute inset-0">
@@ -116,17 +135,23 @@ export default function Hero() {
       <div className="pointer-events-none absolute inset-0 flex flex-col justify-between px-5 pb-8 pt-28 sm:px-10 sm:pb-10">
         <div className="flex items-start justify-between gap-6">
           <p className="hero-line max-w-[22ch] font-display text-[clamp(1.4rem,2.6vw,2.3rem)] font-bold leading-[1.05]">
-            {profile.role}
+            {t.role}
+            {lang === "ar" && (
+              // The Arabic title always sits next to the English one (owner, 2026-11-19).
+              <span lang="en" className="block">
+                {profile.role}
+              </span>
+            )}
           </p>
-          <p className="hero-fade eyebrow hidden text-right sm:block">
-            {profile.location}
+          <p className="hero-fade eyebrow hidden text-end sm:block">
+            {t.place[0]}
             <br />
-            Remote · Open to relocation
+            {t.place[1]}
           </p>
         </div>
 
         <div className="flex items-end justify-between gap-6">
-          <p className="hero-fade max-w-[34ch] text-[0.95rem] leading-relaxed text-ink/75 sm:text-base">{profile.intro}</p>
+          <p className="hero-fade max-w-[34ch] text-[0.95rem] leading-relaxed text-ink/75 sm:text-base">{intro}</p>
           <div className="hero-fade flex items-center gap-4">
             <svg width="46" height="46" viewBox="0 0 46 46" className="-rotate-90" aria-hidden>
               <circle cx="23" cy="23" r="20" fill="none" stroke="rgba(236,235,230,.18)" strokeWidth="1.5" />
@@ -150,16 +175,22 @@ export default function Hero() {
               </defs>
             </svg>
             <span className="eyebrow leading-tight">
-              Press &amp; hold
+              {t.hold[0]}
               <br />
-              to dive in
+              {t.hold[1]}
             </span>
           </div>
         </div>
       </div>
-      <h1 className="sr-only">
-        {profile.name} (<span lang="ar">ماهر المشهراوي</span>), {profile.role}
-      </h1>
+      {lang === "ar" ? (
+        <h1 className="sr-only">
+          ماهر المشهراوي (<span lang="en">{profile.name}</span>)، مهندس برمجيات أول · <span lang="en">{profile.role}</span>
+        </h1>
+      ) : (
+        <h1 className="sr-only">
+          {profile.name} (<span lang="ar">ماهر المشهراوي</span>), {profile.role}
+        </h1>
+      )}
     </section>
   );
 }

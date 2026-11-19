@@ -387,7 +387,7 @@ export const caseStudiesAr: Record<string, CaseStudyText> = {
   },
 };
 
-// The same wording as the strengths on the Arabic homepage (ar.ts).
+// The six strengths in Arabic, keyed by theme.
 export const strengthsAr: Record<Theme, { claim: string; body: string }> = {
   performance: {
     claim: "أجعل المنتجات سريعة، وأحافظ على سرعتها.",

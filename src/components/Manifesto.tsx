@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/motion";
-import { manifesto } from "@/content/site";
+import type { Lang } from "@/lib/i18n";
 
-// Words light up one by one as the paragraph scrolls through the viewport.
-export default function Manifesto() {
+// Words light up one by one as the paragraph scrolls through the viewport (whole words, so Arabic stays joined).
+export default function Manifesto({ text, lang = "en" }: { text: string; lang?: Lang }) {
   const root = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -26,9 +26,9 @@ export default function Manifesto() {
 
   return (
     <section ref={root} className="px-5 py-[22vh] sm:px-10">
-      <p className="eyebrow mb-10">( 01 ) — In short</p>
+      <p className="eyebrow mb-10">( 01 ) — {lang === "ar" ? "باختصار" : "In short"}</p>
       <p className="mf-text max-w-[22ch] font-display text-[clamp(2rem,5.4vw,5.6rem)] font-bold leading-[1.02] tracking-tight sm:max-w-[26ch]">
-        {manifesto.split(" ").map((w, i) => (
+        {text.split(" ").map((w, i) => (
           <span key={i} className="mf-word reveal-word">
             {w}&nbsp;
           </span>

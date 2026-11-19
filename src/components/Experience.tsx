@@ -3,10 +3,17 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/motion";
-import { experience } from "@/content/site";
-import { companies } from "@/content/stories";
+import type { Lang } from "@/lib/i18n";
 
-export default function Experience() {
+type Job = { company: string; role: string; period: string; place: string; points: string[]; href?: string };
+
+const T = {
+  en: { label: "Experience", h2: ["Where I've ", "shipped."], read: "Read the chapter", arrow: "→" },
+  ar: { label: "الخبرة", h2: ["أين عملت ", "وأطلقت."], read: "اقرأ الفصل", arrow: "←" },
+};
+
+export default function Experience({ items, lang = "en" }: { items: Job[]; lang?: Lang }) {
+  const t = T[lang];
   const root = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -32,28 +39,33 @@ export default function Experience() {
 
   return (
     <section ref={root} id="experience" className="px-5 py-[16vh] sm:px-10">
-      <p className="eyebrow mb-6">( 05 ) — Experience</p>
+      <p className="eyebrow mb-6">( 05 ) — {t.label}</p>
       <h2 className="mb-16 font-display text-[clamp(3rem,9vw,9rem)] font-extrabold leading-[0.85] tracking-tighter">
-        Where I&apos;ve <span className="text-gradient">shipped.</span>
+        {t.h2[0]}
+        <span className="text-gradient">{t.h2[1]}</span>
       </h2>
       <ol>
-        {experience.map((x) => (
+        {items.map((x) => (
           <li key={x.company} className="xp-item relative grid gap-6 py-10 md:grid-cols-12">
-            <span className="xp-line absolute left-0 right-0 top-0 h-px origin-left bg-line" />
+            <span className="xp-line absolute left-0 right-0 top-0 h-px origin-left bg-line rtl:origin-right" />
             <div className="md:col-span-4">
               <p className="xp-in eyebrow">{x.period}</p>
-              <h3 className="xp-in mt-3 font-display text-3xl font-bold sm:text-4xl">{x.company}</h3>
+              <h3 lang="en" className="xp-in mt-3 font-display text-3xl font-bold sm:text-4xl">
+                {x.company}
+              </h3>
               <p className="xp-in mt-2 text-muted">
                 {x.role} · {x.place}
               </p>
-              {companies.some((c) => c.name === x.company) && (
+              {x.href && (
                 <Link
-                  href={`/work/${companies.find((c) => c.name === x.company)!.slug}/`}
+                  href={x.href}
                   data-transition={x.company}
                   className="xp-in group mt-5 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.18em] text-cyan"
                 >
-                  Read the chapter
-                  <span className="transition-transform duration-500 group-hover:translate-x-2">→</span>
+                  {t.read}
+                  <span className={`transition-transform duration-500 ${lang === "ar" ? "group-hover:-translate-x-2" : "group-hover:translate-x-2"}`}>
+                    {t.arrow}
+                  </span>
                 </Link>
               )}
             </div>

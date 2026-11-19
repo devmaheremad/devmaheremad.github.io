@@ -106,8 +106,14 @@
 }
 
 /* Spacing between letters pulls joined Arabic letters apart. */
-.ar-page [class*="tracking-"] {
+.ar-page [class*="tracking-"]:not([lang="en"], [lang="en"] *) {
   letter-spacing: 0;
+}
+
+/* English names and tool lists inside Arabic pages (marked lang="en") keep the site's Latin display font and
+   spacing, so they look exactly as on the English pages. */
+.ar-page :is([lang="en"].font-display, [lang="en"] .font-display, .font-display [lang="en"]) {
+  font-family: var(--font-display), var(--font-ar-display), sans-serif;
 }
 
 /* Mono labels keep their Latin font; Arabic letters inside them fall back to the Arabic body font. */
@@ -116,7 +122,7 @@
 }
 
 /* The English inner pages set headings very tight; Arabic needs room for the dots and marks above and below. */
-.ar-sub .font-display:not(.text-outline) {
+.ar-sub .font-display:not(.text-outline, [lang="en"], [lang="en"] *) {
   line-height: 1.35;
 }
 
