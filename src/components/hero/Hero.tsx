@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { gsap, onReady, scrollToId, SplitText } from "@/lib/motion";
 import { profile } from "@/content/site";
 import type { Lang } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
@@ -52,6 +53,7 @@ export default function Hero({ lang = "en", intro }: { lang?: Lang; intro: strin
   const ring = useRef<SVGCircleElement>(null);
   const [active, setActive] = useState(true);
   const webgl = useSyncExternalStore(noSubscribe, hasWebGL, () => false);
+  const theme = useTheme();
 
   // Only render the WebGL scene while the hero is on screen.
   useEffect(() => {
@@ -120,7 +122,7 @@ export default function Hero({ lang = "en", intro }: { lang?: Lang; intro: strin
     >
       <div className="absolute inset-0">
         {webgl ? (
-          <HeroScene power={power} active={active} />
+          <HeroScene power={power} active={active} theme={theme} />
         ) : (
           <div className="absolute inset-0 grid place-items-center overflow-hidden" aria-hidden>
             <div className="text-center font-display font-extrabold leading-[0.82] tracking-tight">
@@ -154,7 +156,7 @@ export default function Hero({ lang = "en", intro }: { lang?: Lang; intro: strin
           <p className="hero-fade max-w-[34ch] text-[0.95rem] leading-relaxed text-ink/75 sm:text-base">{intro}</p>
           <div className="hero-fade flex items-center gap-4">
             <svg width="46" height="46" viewBox="0 0 46 46" className="-rotate-90" aria-hidden>
-              <circle cx="23" cy="23" r="20" fill="none" stroke="rgba(236,235,230,.18)" strokeWidth="1.5" />
+              <circle cx="23" cy="23" r="20" fill="none" style={{ stroke: "color-mix(in srgb, var(--ink) 18%, transparent)" }} strokeWidth="1.5" />
               <circle
                 ref={ring}
                 cx="23"
@@ -169,8 +171,8 @@ export default function Hero({ lang = "en", intro }: { lang?: Lang; intro: strin
               />
               <defs>
                 <linearGradient id="hold" x1="0" x2="1">
-                  <stop offset="0" stopColor="#4cc3ff" />
-                  <stop offset="1" stopColor="#b69cff" />
+                  <stop offset="0" style={{ stopColor: "var(--cyan)" }} />
+                  <stop offset="1" style={{ stopColor: "var(--violet)" }} />
                 </linearGradient>
               </defs>
             </svg>

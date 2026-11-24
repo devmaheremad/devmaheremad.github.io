@@ -42,21 +42,22 @@ export default function Liquid({ tone = "mix" }: { tone?: "mix" | "cyan" | "viol
     };
   }, []);
 
-  const c1 = tone === "violet" ? "182,156,255" : "76,195,255";
-  const c2 = tone === "cyan" ? "76,195,255" : "182,156,255";
+  // Theme colours as "r g b" (globals.css), so the pools tint the paper in the light theme.
+  const c1 = tone === "violet" ? "var(--glow-violet)" : "var(--glow-cyan)";
+  const c2 = tone === "cyan" ? "var(--glow-cyan)" : "var(--glow-violet)";
   return (
     <div ref={root} aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       <div
-        className="lq-blob absolute right-[-8vw] top-[-12vh] h-[70vh] w-[70vh] rounded-full mix-blend-screen"
-        style={{ background: `radial-gradient(circle at 50% 50%, rgba(${c1},.34), rgba(${c1},.08) 45%, transparent 68%)` }}
+        className="lq-blob absolute right-[-8vw] top-[-12vh] h-[70vh] w-[70vh] rounded-full blend-glow"
+        style={{ background: `radial-gradient(circle at 50% 50%, rgb(${c1} / .34), rgb(${c1} / .08) 45%, transparent 68%)` }}
       />
       <div
-        className="lq-blob absolute bottom-[-18vh] right-[18vw] h-[60vh] w-[60vh] rounded-full mix-blend-screen"
-        style={{ background: `radial-gradient(circle at 50% 50%, rgba(${c2},.3), rgba(${c2},.07) 45%, transparent 68%)` }}
+        className="lq-blob absolute bottom-[-18vh] right-[18vw] h-[60vh] w-[60vh] rounded-full blend-glow"
+        style={{ background: `radial-gradient(circle at 50% 50%, rgb(${c2} / .3), rgb(${c2} / .07) 45%, transparent 68%)` }}
       />
       <div
-        className="lq-blob absolute left-[-14vw] top-[30vh] h-[46vh] w-[46vh] rounded-full mix-blend-screen"
-        style={{ background: `radial-gradient(circle at 50% 50%, rgba(${c1},.16), transparent 65%)` }}
+        className="lq-blob absolute left-[-14vw] top-[30vh] h-[46vh] w-[46vh] rounded-full blend-glow"
+        style={{ background: `radial-gradient(circle at 50% 50%, rgb(${c1} / .16), transparent 65%)` }}
       />
       <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_60%,var(--bg))]" />
     </div>

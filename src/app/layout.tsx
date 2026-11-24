@@ -10,6 +10,7 @@ import PageTransition from "@/components/PageTransition";
 import LangSync from "@/components/LangSync";
 import { profile } from "@/content/site";
 import { NAME_VARIANTS } from "@/lib/seo";
+import { THEME_BG, THEME_SCRIPT } from "@/lib/theme-script";
 
 const display = Syne({ variable: "--font-display", subsets: ["latin"], weight: ["600", "700", "800"] });
 const body = Inter_Tight({ variable: "--font-body", subsets: ["latin"] });
@@ -110,12 +111,22 @@ const structuredData = {
   ],
 };
 
-export const viewport: Viewport = { themeColor: "#07070a" };
+// The browser bar follows the system theme here, and the visitor's choice once the page runs (lib/theme.ts).
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: THEME_BG.light },
+    { media: "(prefers-color-scheme: dark)", color: THEME_BG.dark },
+  ],
+};
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     // The Arabic page's static HTML gets lang="ar" dir="rtl" after the build (scripts/flatten-segments.mjs); LangSync keeps it right on client navigation.
+    // data-theme is set in <head> before the first paint, so it differs from the server HTML: suppressHydrationWarning.
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
         {profile.links.map((l) => (
           <link key={l.href} rel="me" href={l.href} />

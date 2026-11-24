@@ -175,7 +175,7 @@ export default function DecisionsPage({ lang }: { lang: Lang }) {
               <li key={s.id} className={`relative grid gap-6 pb-16 ps-10 md:w-1/2 md:ps-0 ${k % 2 ? "md:ms-auto md:ps-14" : "md:pe-14 md:text-end"}`}>
                 <span
                   aria-hidden
-                  className={`absolute start-[5px] top-2 h-3.5 w-3.5 rounded-full bg-gradient-to-r from-cyan to-violet shadow-[0_0_24px_rgba(76,195,255,.6)] ${
+                  className={`absolute start-[5px] top-2 h-3.5 w-3.5 rounded-full bg-gradient-to-r from-cyan to-violet shadow-[0_0_24px_rgb(var(--glow-cyan)/.6)] ${
                     k % 2 ? "md:-start-[7px]" : "md:-end-[7px] md:start-auto"
                   }`}
                 />

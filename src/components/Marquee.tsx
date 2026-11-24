@@ -37,7 +37,7 @@ export default function Marquee() {
         <span
           key={i}
           className={`whitespace-nowrap px-6 font-display text-[clamp(2.4rem,6vw,5.6rem)] font-extrabold uppercase leading-[1.1] tracking-tight ${
-            outlined ? "text-transparent [-webkit-text-stroke:1px_rgba(236,235,230,.45)]" : ""
+            outlined ? "text-stroke" : ""
           }`}
         >
           {s}

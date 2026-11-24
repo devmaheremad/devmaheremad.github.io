@@ -4,6 +4,7 @@ import { useMemo, useRef, type MutableRefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer, MeshTransmissionMaterial, Text } from "@react-three/drei";
 import * as THREE from "three";
+import type { Theme } from "@/lib/theme";
 
 type Power = MutableRefObject<number>;
 type TransmissionMat = THREE.MeshPhysicalMaterial & {
@@ -14,9 +15,16 @@ type TransmissionMat = THREE.MeshPhysicalMaterial & {
 
 const FONT = "/fonts/syne-800.woff";
 
+// The scene's colours per theme: the same tokens as globals.css. On paper the glass is clear and the sparks darker.
+const PALETTE = {
+  dark: { bg: "#07070a", name: "#ecebe6", role: "#4cc3ff", sparks: "#b69cff", sparkOpacity: 0.7, glass: "#eef6ff" },
+  light: { bg: "#f3f1ea", name: "#111116", role: "#0570b0", sparks: "#6b47d6", sparkOpacity: 0.45, glass: "#ffffff" },
+} satisfies Record<Theme, Record<string, string | number>>;
+type Palette = (typeof PALETTE)[Theme];
+
 // A glass knot floating in front of the name. The glass refracts the text behind it; pressing and holding
 // "overdrives" it: faster spin, stronger chromatic aberration and distortion.
-function Core({ power }: { power: Power }) {
+function Core({ power, pal }: { power: Power; pal: Palette }) {
   const mesh = useRef<THREE.Mesh>(null!);
   const mat = useRef<TransmissionMat>(null!);
   const { viewport } = useThree();
@@ -56,13 +64,13 @@ function Core({ power }: { power: Power }) {
         distortion={0.3}
         distortionScale={0.45}
         temporalDistortion={0.08}
-        color="#eef6ff"
+        color={pal.glass}
       />
     </mesh>
   );
 }
 
-function Backdrop({ power }: { power: Power }) {
+function Backdrop({ power, pal }: { power: Power; pal: Palette }) {
   const { viewport } = useThree();
   const group = useRef<THREE.Group>(null!);
   const size = viewport.aspect < 1 ? viewport.width / 3.9 : Math.min(viewport.width / 5.2, viewport.height / 2.4);
@@ -74,10 +82,10 @@ function Backdrop({ power }: { power: Power }) {
   });
   return (
     <group ref={group} position={[0, 0, -2.4]}>
-      <Text font={FONT} fontSize={size} letterSpacing={-0.04} color="#ecebe6" anchorX="center" anchorY="middle" position={[0, size * 0.42, 0]}>
+      <Text font={FONT} fontSize={size} letterSpacing={-0.04} color={pal.name} anchorX="center" anchorY="middle" position={[0, size * 0.42, 0]}>
         MAHER
       </Text>
-      <Text font={FONT} fontSize={size * 0.42} letterSpacing={0.02} color="#4cc3ff" anchorX="center" anchorY="middle" position={[0, -size * 0.42, 0]}>
+      <Text font={FONT} fontSize={size * 0.42} letterSpacing={0.02} color={pal.role} anchorX="center" anchorY="middle" position={[0, -size * 0.42, 0]}>
         FRONTEND
       </Text>
     </group>
@@ -105,7 +113,7 @@ const SPARK_POSITIONS = (() => {
   return pos;
 })();
 
-function Sparks({ power }: { power: Power }) {
+function Sparks({ power, pal }: { power: Power; pal: Palette }) {
   const points = useRef<THREE.Points>(null!);
   const geo = useMemo(() => {
     const g = new THREE.BufferGeometry();
@@ -117,12 +125,13 @@ function Sparks({ power }: { power: Power }) {
   });
   return (
     <points ref={points} geometry={geo}>
-      <pointsMaterial size={0.018} color="#b69cff" transparent opacity={0.7} sizeAttenuation />
+      <pointsMaterial size={0.018} color={pal.sparks} transparent opacity={pal.sparkOpacity} sizeAttenuation />
     </points>
   );
 }
 
-export default function HeroScene({ power, active }: { power: Power; active: boolean }) {
+export default function HeroScene({ power, active, theme }: { power: Power; active: boolean; theme: Theme }) {
+  const pal = PALETTE[theme];
   return (
     <Canvas
       frameloop={active ? "always" : "never"}
@@ -130,10 +139,10 @@ export default function HeroScene({ power, active }: { power: Power; active: boo
       camera={{ position: [0, 0, 6], fov: 34 }}
       gl={{ antialias: true, powerPreference: "high-performance" }}
     >
-      <color attach="background" args={["#07070a"]} />
-      <Backdrop power={power} />
-      <Sparks power={power} />
-      <Core power={power} />
+      <color attach="background" args={[pal.bg]} />
+      <Backdrop power={power} pal={pal} />
+      <Sparks power={power} pal={pal} />
+      <Core power={power} pal={pal} />
       <Environment resolution={256}>
         <group rotation={[-Math.PI / 3, 0, 1]}>
           <Lightformer form="circle" intensity={4} rotation-x={Math.PI / 2} position={[0, 5, -9]} scale={2} />

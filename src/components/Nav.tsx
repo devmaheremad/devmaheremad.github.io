@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { gsap, onReady } from "@/lib/motion";
+import { gsap, onReady, scramble } from "@/lib/motion";
 import { profile } from "@/content/site";
 import { companies } from "@/content/stories";
 import { counterpart, isArPath, localePath, UI, type Lang } from "@/lib/i18n";
+import ThemeToggle from "@/components/ThemeToggle";
 
 type NavLink = { href: string; label: string; lang?: Lang };
 
@@ -162,8 +163,12 @@ export default function Nav() {
                   data-transition={l.label}
                   aria-current={pathname === l.href ? "page" : undefined}
                   className={`group relative ${l.lang === "ar" ? "font-ar text-sm" : "font-mono text-[0.72rem] uppercase tracking-[0.18em]"}`}
+                  // The name stays readable while the letters decode.
+                  aria-label={l.lang === "ar" ? undefined : l.label}
+                  onPointerEnter={l.lang === "ar" ? undefined : (e) => scramble(e.currentTarget.firstElementChild as HTMLElement)}
+                  onFocus={l.lang === "ar" ? undefined : (e) => scramble(e.currentTarget.firstElementChild as HTMLElement)}
                 >
-                  {l.label}
+                  <span>{l.label}</span>
                   <span
                     className={`absolute -bottom-1 left-0 h-px w-full bg-ink transition-transform duration-500 group-hover:origin-left group-hover:scale-x-100 ${
                       pathname === l.href ? "scale-x-100" : "origin-right scale-x-0"
@@ -172,6 +177,9 @@ export default function Nav() {
                 </Link>
               </li>
             ))}
+            <li>
+              <ThemeToggle lang={lang} />
+            </li>
             <li>
               <button
                 onClick={() => setOpen((o) => !o)}
@@ -212,7 +220,7 @@ export default function Nav() {
         className={`invisible fixed inset-0 z-[54] overflow-y-auto bg-bg-2 ${isAr ? "ar-page ar-sub" : ""}`}
         data-lenis-prevent
       >
-        <div className="pointer-events-none absolute -right-[20vw] -top-[20vh] h-[80vh] w-[80vh] rounded-full bg-[radial-gradient(circle,rgba(76,195,255,.18),rgba(182,156,255,.1)_45%,transparent_70%)] blur-2xl" />
+        <div className="pointer-events-none absolute -right-[20vw] -top-[20vh] h-[80vh] w-[80vh] rounded-full bg-[radial-gradient(circle,rgb(var(--glow-cyan)/.18),rgb(var(--glow-violet)/.1)_45%,transparent_70%)] blur-2xl" />
         <div className="relative grid min-h-full gap-12 px-5 pb-10 pt-28 sm:px-10 lg:grid-cols-12">
           <ol className="lg:col-span-8">
             {menu.map((l, i) => (

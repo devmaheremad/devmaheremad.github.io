@@ -32,3 +32,23 @@ export function scrollToId(id: string) {
   if (lenis) lenis.scrollTo(`#${id}`, { duration: 1.6 });
   else document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
+
+// Code-style text decode: the letters run through symbols and settle left to right. Edits the element's own text
+// node, so React keeps owning it. Latin mono labels only (Arabic letters join, and scrambling would break them).
+const GLYPHS = "<>/{}[]=+*_#01";
+export function scramble(el: HTMLElement, duration = 420) {
+  const node = el.firstChild;
+  if (!node || node.nodeType !== Node.TEXT_NODE || prefersReducedMotion()) return;
+  const text = (el.dataset.text ??= node.nodeValue ?? "");
+  const start = performance.now();
+  cancelAnimationFrame(Number(el.dataset.raf));
+  const frame = (now: number) => {
+    const k = Math.min(1, (now - start) / duration);
+    const fixed = Math.floor(k * text.length);
+    let out = text.slice(0, fixed);
+    for (let i = fixed; i < text.length; i++) out += text[i] === " " ? " " : GLYPHS[(Math.random() * GLYPHS.length) | 0];
+    node.nodeValue = out;
+    if (k < 1) el.dataset.raf = String(requestAnimationFrame(frame));
+  };
+  el.dataset.raf = String(requestAnimationFrame(frame));
+}

@@ -76,7 +76,7 @@ export default function Contact({ index = "06", lang = "en" }: { index?: string;
 
   return (
     <footer ref={root} id="contact" className="relative overflow-hidden px-5 pb-10 pt-[18vh] sm:px-10">
-      <div className="pointer-events-none absolute -bottom-1/2 left-1/2 h-[90vh] w-[90vh] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(76,195,255,.22),rgba(182,156,255,.12)_40%,transparent_70%)] blur-2xl" />
+      <div className="pointer-events-none absolute -bottom-1/2 left-1/2 h-[90vh] w-[90vh] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgb(var(--glow-cyan)/.22),rgb(var(--glow-violet)/.12)_40%,transparent_70%)] blur-2xl" />
       <p className="ct-in eyebrow mb-8">
         ( {index} ) — {t.label}
       </p>

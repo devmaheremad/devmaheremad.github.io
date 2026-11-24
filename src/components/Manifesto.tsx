@@ -10,11 +10,12 @@ export default function Manifesto({ text, lang = "en" }: { text: string; lang?: 
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Each word mixes from --dim to --ink (globals.css, .mf-word), so the effect works in both themes.
       gsap.fromTo(
         ".mf-word",
-        { color: "#5f5f6b" },
+        { "--lit": 0 },
         {
-          color: "#ecebe6",
+          "--lit": 1,
           stagger: 0.05,
           ease: "none",
           scrollTrigger: { trigger: ".mf-text", start: "top 75%", end: "bottom 45%", scrub: true },
