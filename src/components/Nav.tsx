@@ -142,20 +142,23 @@ export default function Nav() {
           <Link href={isAr ? "/ar/" : "/"} dir="ltr" data-magnetic className="font-display text-xl font-extrabold tracking-tight" aria-label="Maher Almashharawi, home">
             MA<span className="text-cyan">.</span>
           </Link>
-          <div className="hidden items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.18em] text-ink/70 lg:flex">
+          <div className="hidden items-center gap-2 whitespace-nowrap font-mono text-[0.7rem] uppercase tracking-[0.18em] text-ink/70 lg:flex">
             <span className="relative mr-1 inline-flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
             </span>
+            {/* The place and time from 1280px up; at 1024px the bar has room for "Available now" only. */}
             {isAr ? (
               <span lang="ar" className="font-ar text-xs">
-                متاح الآن · فلسطين {time}
+                متاح الآن<span className="hidden xl:inline"> · فلسطين {time}</span>
               </span>
             ) : (
-              <>Available now · Palestine {time}</>
+              <span>
+                Available now<span className="hidden xl:inline"> · Palestine {time}</span>
+              </span>
             )}
           </div>
-          <ul className="flex items-center gap-4 sm:gap-8">
+          <ul className="flex items-center gap-4 sm:gap-6 xl:gap-8">
             {inline.map((l) => (
               <li key={l.href} className="hidden md:block">
                 <Link
@@ -180,10 +183,11 @@ export default function Nav() {
               </li>
             ))}
             <li>
-              <SoundToggle lang={lang} />
-            </li>
-            <li>
-              <ThemeToggle lang={lang} />
+              {/* Sound and theme sit together, so the bar still fits on one line at 1024px. */}
+              <div className="flex items-center gap-2">
+                <SoundToggle lang={lang} />
+                <ThemeToggle lang={lang} />
+              </div>
             </li>
             <li>
               <button

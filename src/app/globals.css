@@ -517,53 +517,44 @@ html.theme-fade * {
 }
 
 /* ---------- sound switch ---------- */
-/* Off: flat bars. On but waiting for the first click: still bars of mixed heights. Playing: the bars dance. */
-.snd-bar {
-  height: 2px;
-  transform-origin: bottom;
-  transition: height 0.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+/* Muted: a cross next to the speaker. On: two waves, still until the first click starts the audio, then pulsing. */
+.snd-wave,
+.snd-x {
+  transition: opacity 0.35s, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-box: fill-box;
+  transform-origin: left center;
 }
 
-.snd.is-on .snd-bar {
-  height: 100%;
-  transform: scaleY(0.45);
+.snd-wave {
+  opacity: 0;
+  transform: scale(0.6);
 }
 
-.snd.is-on .snd-bar:nth-child(2) {
-  transform: scaleY(0.8);
+.snd.is-on .snd-wave {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.snd.is-on .snd-bar:nth-child(3) {
-  transform: scaleY(0.6);
+.snd.is-on .snd-x {
+  opacity: 0;
+  transform: scale(0.5);
 }
 
-.snd.is-on .snd-bar:nth-child(4) {
-  transform: scaleY(0.35);
+.snd.is-playing .snd-wave {
+  animation: snd-wave 1.6s ease-in-out infinite;
 }
 
-.snd.is-playing .snd-bar {
-  animation: snd-bar 0.9s ease-in-out infinite alternate;
+.snd.is-playing .snd-wave-2 {
+  animation-delay: 0.25s;
 }
 
-.snd.is-playing .snd-bar:nth-child(2) {
-  animation-duration: 0.7s;
-}
-
-.snd.is-playing .snd-bar:nth-child(3) {
-  animation-duration: 1.1s;
-}
-
-.snd.is-playing .snd-bar:nth-child(4) {
-  animation-duration: 0.8s;
-}
-
-@keyframes snd-bar {
-  0% { transform: scaleY(0.25); }
-  100% { transform: scaleY(1); }
+@keyframes snd-wave {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .snd.is-playing .snd-bar {
+  .snd.is-playing .snd-wave {
     animation: none;
   }
 }

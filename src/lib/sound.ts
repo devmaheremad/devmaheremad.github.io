@@ -12,9 +12,10 @@ import { useSyncExternalStore } from "react";
 
 const KEY = "sound";
 const EVENT = "site:sound";
-// Levels: cues peak near -18 dBFS; the ambient pad is soft and low, well under the cues.
+// Levels: cues peak near -18 dBFS. The ambient pad is barely there (owner, 2026-11-24: "very, very low, just
+// audible"): a peak near 0.004, about -48 dBFS, some 30 dB under the cues.
 const LOUD = 2.6;
-const PAD = 0.012;
+const PAD = 0.0042;
 const NOTES = [220, 261.63, 293.66, 329.63, 392, 440, 523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66, 1318.51];
 
 type Ctx = {
@@ -112,21 +113,21 @@ function build(): Ctx {
   airSrc.connect(hp).connect(airFilter).connect(air).connect(bus);
   airSrc.start();
 
-  // Ambient pad: light and low. Pure sines, no bass: A3, E4 and a faint B4, each a detuned pair that beats slowly,
-  // under a gently breathing low-pass, with a little of it sent to the reverb.
+  // Ambient pad: a soft, barely-there bed. Pure sines, no bass: A3 and E4, each a pair detuned by a hair so it drifts
+  // instead of beating, under a slowly breathing low-pass, with a little of it sent to the reverb.
   const pad = ac.createGain();
   pad.gain.value = 0;
   const padFilter = ac.createBiquadFilter();
   padFilter.type = "lowpass";
-  padFilter.frequency.value = isLight() ? 720 : 480;
-  padFilter.Q.value = 0.4;
+  padFilter.frequency.value = isLight() ? 560 : 400;
+  padFilter.Q.value = 0.3;
   padFilter.connect(pad);
   pad.connect(bus);
   const padVerb = ac.createGain();
-  padVerb.gain.value = 0.5;
+  padVerb.gain.value = 0.35;
   pad.connect(padVerb).connect(verb);
-  for (const [f, level] of [[220, 0.3], [329.63, 0.22], [493.88, 0.1]]) {
-    for (const cents of [-4, 4]) {
+  for (const [f, level] of [[220, 0.32], [329.63, 0.2]]) {
+    for (const cents of [-2.5, 2.5]) {
       const o = ac.createOscillator();
       o.type = "sine";
       o.frequency.value = f;
@@ -138,9 +139,9 @@ function build(): Ctx {
     }
   }
   const lfo = ac.createOscillator();
-  lfo.frequency.value = 0.04;
+  lfo.frequency.value = 0.03;
   const depth = ac.createGain();
-  depth.gain.value = 110;
+  depth.gain.value = 70;
   lfo.connect(depth).connect(padFilter.frequency);
   lfo.start();
 
@@ -158,7 +159,7 @@ export function unlockSound() {
   if (c.ac.state !== "running") c.ac.resume().catch(() => {});
   const t = c.ac.currentTime;
   c.pad.gain.cancelScheduledValues(t);
-  c.pad.gain.setTargetAtTime(PAD, t, 2.5);
+  c.pad.gain.setTargetAtTime(PAD, t, 4);
 }
 
 export function setSound(on: boolean) {
@@ -191,7 +192,7 @@ export function onVisibility(visible: boolean) {
 // The pad brightens on paper and darkens at night.
 export function soundTheme(light: boolean) {
   if (!c) return;
-  c.padFilter.frequency.setTargetAtTime(light ? 720 : 480, c.ac.currentTime, 0.8);
+  c.padFilter.frequency.setTargetAtTime(light ? 560 : 400, c.ac.currentTime, 0.8);
 }
 
 // ---------- voices ----------
