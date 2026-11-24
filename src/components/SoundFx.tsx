@@ -18,8 +18,12 @@ export default function SoundFx() {
     // Start as the page opens where the browser allows sound without a gesture (lib/sound.ts, autoStartSound).
     const auto = window.setTimeout(autoStartSound, 400);
     // Elsewhere audio may only start inside a gesture: the first click, tap or key press starts it. Touch screens count
-    // the end of a tap (pointerup, touchend), not its start, so all of them are listened to.
-    const unlock = () => unlockSound();
+    // the end of a tap (pointerup, touchend), not its start, so all of them are listened to. A press on a control
+    // marked data-sound-skip (the Sound switch, the hint's Mute) is left to that control: muting never starts it first.
+    const unlock = (e: Event) => {
+      if (e.target instanceof Element && e.target.closest("[data-sound-skip]")) return;
+      unlockSound();
+    };
     let lastHover: Element | null = null;
     let lastHoverAt = 0;
     const over = (e: PointerEvent) => {
@@ -33,7 +37,7 @@ export default function SoundFx() {
       sfx("hover");
     };
     const down = (e: PointerEvent) => {
-      unlock();
+      unlock(e);
       const el = (e.target as Element).closest(INTERACTIVE);
       if (el && !el.closest("[data-sfx='none']")) sfx("tap");
     };

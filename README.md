@@ -22,7 +22,8 @@ smooth scrolling and scroll-driven animation, kept fast: Lighthouse 90+ performa
 - **Sound design, made in code** (`src/lib/sound.ts`): every sound is synthesized with the Web Audio API, so there are
   no audio files to download or license. On by default: it starts by itself as the page opens where the browser allows
   sound without a gesture, otherwise with the visitor's first click, tap or key press (most browsers allow no sound
-  before that), and the "Sound" switch in the bar (a speaker that shows waves or a cross) mutes it (saved). One palette
+  before that; a note under the switch then says to click anywhere, or to mute it), and the "Sound" switch in the bar
+  (a speaker that shows waves or a cross) mutes it (saved). One palette
   (A minor pentatonic, soft sines and glassy FM bells in a short reverb) over a barely audible ambient bed of pure sines
   that brightens a little in the light theme. Hover ticks and click taps, a soft breath of air that follows the scroll
   speed, a cue per homepage section

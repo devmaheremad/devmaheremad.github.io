@@ -558,3 +558,25 @@ html.theme-fade * {
     animation: none;
   }
 }
+
+/* ---------- sound hint ---------- */
+/* Under the Sound switch while the browser holds the sound back: it drops in, and fades out once sound plays. */
+.snd-hint {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-0.45rem);
+  transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.55s;
+}
+
+.snd-hint.is-shown {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snd-hint {
+    transform: none;
+  }
+}

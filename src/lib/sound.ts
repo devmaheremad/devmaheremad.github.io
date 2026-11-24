@@ -195,13 +195,17 @@ function fadeIn(x: Ctx) {
 // creeps in.
 export function unlockSound() {
   if (!read()) return;
-  // A context the browser held back as the page opened can refuse to resume even inside a gesture (Chromium's strict
-  // autoplay mode does), while one made inside the gesture always starts: drop the probe and build afresh.
-  if (probe) {
-    probe.close().catch(() => {});
-    probe = null;
+  if (!c) {
+    // A context made outside a gesture the browser counts is held back and can refuse to start later, even inside one
+    // (Chromium's strict autoplay mode does). The start of a touch doesn't count, only its end, so wait for that.
+    if (navigator.userActivation?.isActive === false) return;
+    // The probe made as the page opened is one of those: drop it and build afresh inside the gesture.
+    if (probe) {
+      probe.close().catch(() => {});
+      probe = null;
+    }
+    c = build();
   }
-  if (!c) c = build();
   if (c.ac.state !== "running") c.ac.resume().catch(() => {});
   fadeIn(c);
 }
