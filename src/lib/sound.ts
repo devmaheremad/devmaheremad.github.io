@@ -3,8 +3,10 @@
 import { useSyncExternalStore } from "react";
 
 // Sound design, synthesized with the Web Audio API: no audio files, nothing to download, nothing to license.
-// On by default (owner, 2026-11-24); the switch in the bar turns it off, and that choice is saved. Browsers let no page
-// play sound before the visitor's first click, tap or key press, so the sound starts with that first gesture.
+// On by default (owner, 2026-11-24); the switch in the bar turns it off, and that choice is saved. It tries to start by
+// itself as the page opens, which works where the browser allows sound without a gesture (autoplay allowed for the
+// site). Most browsers don't by default, and no page can get around that: there it starts with the visitor's first
+// click, tap or key press.
 //
 // One palette for the whole site: A minor pentatonic, soft sines and glassy FM bells in a little reverb, under a quiet
 // ambient pad (the site's own sound). Each homepage section has its own cue; scrolling adds a breath of air that
@@ -33,6 +35,8 @@ type Ctx = {
 let enabled = false;
 let loaded = false;
 let c: Ctx | null = null;
+// A bare context made as the page opens, to see whether the browser lets sound start without a gesture.
+let probe: AudioContext | null = null;
 
 function read() {
   if (!loaded) {
@@ -67,8 +71,7 @@ export function useSoundOn() {
 const isLight = () => document.documentElement.getAttribute("data-theme") === "light";
 
 // ---------- graph ----------
-function build(): Ctx {
-  const ac = new AudioContext({ latencyHint: "interactive" });
+function build(ac = new AudioContext({ latencyHint: "interactive" })): Ctx {
   ac.onstatechange = () => window.dispatchEvent(new Event(EVENT));
   const comp = ac.createDynamicsCompressor();
   comp.threshold.value = -18;
@@ -98,7 +101,8 @@ function build(): Ctx {
   const nd = noise.getChannelData(0);
   for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
 
-  // Scroll air: looped noise, band-limited, silent until the page moves.
+  // Scroll air: looped noise, silent until the page moves. Kept light and soft (owner, 2026-11-24): a dark, rounded
+  // band, a sweeping low-pass without resonance, then a fixed one so no hiss gets through even on a fast scroll.
   const airSrc = ac.createBufferSource();
   airSrc.buffer = noise;
   airSrc.loop = true;
@@ -107,10 +111,15 @@ function build(): Ctx {
   hp.frequency.value = 140;
   const airFilter = ac.createBiquadFilter();
   airFilter.type = "lowpass";
-  airFilter.frequency.value = 700;
+  airFilter.frequency.value = 400;
+  airFilter.Q.value = 0.5;
+  const airSoft = ac.createBiquadFilter();
+  airSoft.type = "lowpass";
+  airSoft.frequency.value = 1400;
+  airSoft.Q.value = 0.5;
   const air = ac.createGain();
   air.gain.value = 0;
-  airSrc.connect(hp).connect(airFilter).connect(air).connect(bus);
+  airSrc.connect(hp).connect(airFilter).connect(airSoft).connect(air).connect(bus);
   airSrc.start();
 
   // Ambient pad: a soft, barely-there bed. Pure sines, no bass: A3 and E4, each a pair detuned by a hair so it drifts
@@ -152,14 +161,49 @@ function running() {
   return enabled && c && c.ac.state === "running" ? c : null;
 }
 
-// Start (or resume) audio. Must run inside a click, tap or key press the first time. The pad creeps in.
+// Try to start without a gesture, as the page opens. Where the browser allows it (autoplay allowed for the site) the
+// sound simply plays. Most browsers hold it back by default, and no page can get around that: there the probe waits
+// and the first click, tap or key press starts the sound (unlockSound). Firefox can say beforehand that it will
+// refuse, which spares the console warning there.
+export function autoStartSound() {
+  if (!read() || c || probe) return;
+  const nav = navigator as Navigator & { getAutoplayPolicy?: (type: "audiocontext") => string };
+  try {
+    if (nav.getAutoplayPolicy?.("audiocontext") === "disallowed") return;
+  } catch {}
+  const ac = new AudioContext({ latencyHint: "interactive" });
+  probe = ac;
+  const go = () => {
+    if (probe !== ac || c) return;
+    probe = null;
+    if (!enabled) return void ac.close().catch(() => {});
+    c = build(ac);
+    fadeIn(c);
+    window.dispatchEvent(new Event(EVENT));
+  };
+  if (ac.state === "running") go();
+  else ac.resume().then(go, () => {});
+}
+
+function fadeIn(x: Ctx) {
+  const t = x.ac.currentTime;
+  x.pad.gain.cancelScheduledValues(t);
+  x.pad.gain.setTargetAtTime(PAD, t, 4);
+}
+
+// Start (or resume) audio. Without autoplay it must run inside a click, tap or key press the first time. The pad
+// creeps in.
 export function unlockSound() {
   if (!read()) return;
+  // A context the browser held back as the page opened can refuse to resume even inside a gesture (Chromium's strict
+  // autoplay mode does), while one made inside the gesture always starts: drop the probe and build afresh.
+  if (probe) {
+    probe.close().catch(() => {});
+    probe = null;
+  }
   if (!c) c = build();
   if (c.ac.state !== "running") c.ac.resume().catch(() => {});
-  const t = c.ac.currentTime;
-  c.pad.gain.cancelScheduledValues(t);
-  c.pad.gain.setTargetAtTime(PAD, t, 4);
+  fadeIn(c);
 }
 
 export function setSound(on: boolean) {
@@ -172,7 +216,13 @@ export function setSound(on: boolean) {
   if (on) {
     unlockSound();
     window.setTimeout(() => sfx("on"), 60);
-  } else if (c) {
+    return;
+  }
+  if (probe) {
+    probe.close().catch(() => {});
+    probe = null;
+  }
+  if (c) {
     const t = c.ac.currentTime;
     c.pad.gain.setTargetAtTime(0, t, 0.25);
     c.air.gain.setTargetAtTime(0, t, 0.1);
@@ -347,7 +397,8 @@ export function sfx(name: string, arg?: number) {
   if (x && r) r(x, arg);
 }
 
-// Scroll: the air follows the speed (pixels per millisecond) and fades when the page stops.
+// Scroll: a soft breath of air that follows the speed (pixels per millisecond), eases in and fades when the page stops.
+// About a third of its first level, and darker: the low-pass opens from 300 Hz to 1.1 kHz at most.
 export function scrollAir(speed: number) {
   const x = running();
   if (!x) return;
@@ -357,9 +408,9 @@ export function scrollAir(speed: number) {
   const g = x.air.gain as AudioParam & { cancelAndHoldAtTime?: (t: number) => AudioParam };
   if (g.cancelAndHoldAtTime) g.cancelAndHoldAtTime(t);
   else g.cancelScheduledValues(t);
-  g.setTargetAtTime(v * 0.16, t, 0.06);
-  x.airFilter.frequency.setTargetAtTime(500 + v * 1800, t, 0.1);
-  g.setTargetAtTime(0, t + 0.12, 0.18);
+  g.setTargetAtTime(Math.pow(v, 1.2) * 0.085, t, 0.1);
+  x.airFilter.frequency.setTargetAtTime(300 + v * 800, t, 0.2);
+  g.setTargetAtTime(0, t + 0.14, 0.25);
 }
 
 // Hero press & hold: a detuned fifth that climbs and opens up with the power (0 to 1).

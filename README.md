@@ -20,10 +20,12 @@ smooth scrolling and scroll-driven animation, kept fast: Lighthouse 90+ performa
   from the first paint; then the mark fills with the progress while a build log ticks off, and the page opens through
   the dot. Later visits in the same tab get a short version; "reduce motion" keeps the fill and fades the page in.
 - **Sound design, made in code** (`src/lib/sound.ts`): every sound is synthesized with the Web Audio API, so there are
-  no audio files to download or license. On by default: it starts with the visitor's first click, tap or key press
-  (browsers allow no sound before that), and the "Sound" switch in the bar (a speaker that shows waves or a cross)
-  mutes it (saved). One palette (A minor pentatonic, soft sines and glassy FM bells in a short reverb) over a barely
-  audible ambient bed of pure sines that brightens a little in the light theme. Hover ticks and click taps, air that follows the scroll speed, a cue per homepage section
+  no audio files to download or license. On by default: it starts by itself as the page opens where the browser allows
+  sound without a gesture, otherwise with the visitor's first click, tap or key press (most browsers allow no sound
+  before that), and the "Sound" switch in the bar (a speaker that shows waves or a cross) mutes it (saved). One palette
+  (A minor pentatonic, soft sines and glassy FM bells in a short reverb) over a barely audible ambient bed of pure sines
+  that brightens a little in the light theme. Hover ticks and click taps, a soft breath of air that follows the scroll
+  speed, a cue per homepage section
   (`data-sound`), a pluck per store in the gallery, a bell per section on inner pages, whooshes for the menu and the
   page curtain, a shimmer for the theme switch, and a rising tone for the hero's press & hold.
 - **Motion:** GSAP (ScrollTrigger, SplitText) driven by Lenis smooth scroll on one ticker. Pinned horizontal gallery,

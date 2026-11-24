@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { onVisibility, scrollAir, sfx, soundTheme, unlockSound, useSoundOn } from "@/lib/sound";
+import { autoStartSound, onVisibility, scrollAir, sfx, soundTheme, unlockSound, useSoundOn } from "@/lib/sound";
 
 // Links and buttons only: the hero carries data-cursor too, and pressing it is the hold gesture, which has its own sound.
 const INTERACTIVE = "a[href], button, [role='button'], summary";
@@ -15,8 +15,10 @@ export default function SoundFx() {
 
   useEffect(() => {
     if (!on) return;
-    // Audio may only start inside a gesture: the first click, tap or key press starts it. Touch screens count the end
-    // of a tap (pointerup, touchend), not its start, so all of them are listened to.
+    // Start as the page opens where the browser allows sound without a gesture (lib/sound.ts, autoStartSound).
+    const auto = window.setTimeout(autoStartSound, 400);
+    // Elsewhere audio may only start inside a gesture: the first click, tap or key press starts it. Touch screens count
+    // the end of a tap (pointerup, touchend), not its start, so all of them are listened to.
     const unlock = () => unlockSound();
     let lastHover: Element | null = null;
     let lastHoverAt = 0;
@@ -56,6 +58,7 @@ export default function SoundFx() {
     window.addEventListener("scroll", scroll, { passive: true });
     document.addEventListener("visibilitychange", vis);
     return () => {
+      window.clearTimeout(auto);
       document.removeEventListener("pointerdown", down, true);
       document.removeEventListener("pointerup", unlock, true);
       document.removeEventListener("touchend", unlock, true);
