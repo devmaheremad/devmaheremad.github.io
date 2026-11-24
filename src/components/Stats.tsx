@@ -33,7 +33,7 @@ export default function Stats({ items }: { items: Stat[] }) {
   }, []);
 
   return (
-    <section ref={root} className="border-y border-line px-5 py-16 sm:px-10">
+    <section ref={root} data-sound="stats" className="border-y border-line px-5 py-16 sm:px-10">
       <ul className="grid grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-3 xl:grid-cols-5">
         {items.map((s) => (
           <li key={s.label} className="st-item">

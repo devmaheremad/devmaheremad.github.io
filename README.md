@@ -19,6 +19,12 @@ smooth scrolling and scroll-driven animation, kept fast: Lighthouse 90+ performa
 - **Preloader as a build:** a layout grid drops in and the "M." mark (Syne's own glyph outlines) draws itself in CSS
   from the first paint; then the mark fills with the progress while a build log ticks off, and the page opens through
   the dot. Later visits in the same tab get a short version; "reduce motion" keeps the fill and fades the page in.
+- **Sound design, made in code** (`src/lib/sound.ts`): every sound is synthesized with the Web Audio API, so there are
+  no audio files to download or license. Off by default; the equalizer switch in the bar turns it on (saved). One
+  palette (A minor pentatonic, soft sines and glassy FM bells in a short reverb) over a quiet ambient pad that brightens
+  in the light theme. Hover ticks and click taps, air that follows the scroll speed, a cue per homepage section
+  (`data-sound`), a pluck per store in the gallery, a bell per section on inner pages, whooshes for the menu and the
+  page curtain, a shimmer for the theme switch, and a rising tone for the hero's press & hold.
 - **Motion:** GSAP (ScrollTrigger, SplitText) driven by Lenis smooth scroll on one ticker. Pinned horizontal gallery,
   scroll-scrubbed word reveal, velocity-skewed marquee, magnetic buttons, a custom blend-mode cursor, and bar links
   that decode like code on hover.

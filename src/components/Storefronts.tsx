@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/motion";
+import { gsap, ScrollTrigger } from "@/lib/motion";
+import { sfx } from "@/lib/sound";
 import { storefronts } from "@/content/site";
 import type { Lang } from "@/lib/i18n";
 
@@ -60,13 +61,23 @@ export default function Storefronts({ lang = "en" }: { lang?: Lang }) {
           },
         });
       });
+      // A pluck as each store reaches the middle of the screen, a note higher per store.
+      gsap.utils.toArray<HTMLElement>(".sf-card").forEach((card, i) => {
+        ScrollTrigger.create({
+          trigger: card,
+          containerAnimation: tween,
+          start: rtl ? "right 55%" : "left 55%",
+          onEnter: () => sfx("card", i),
+          onEnterBack: () => sfx("card", i),
+        });
+      });
     });
     return () => mm.revert();
   }, [rtl]);
 
   return (
     // GSAP wraps the pinned element in a spacer; pinning an inner div keeps React's own section untouched.
-    <section ref={root} id="work" className="relative">
+    <section ref={root} id="work" data-sound="work" className="relative">
       <div ref={pinned} className="relative overflow-hidden py-24 md:flex md:h-[100svh] md:items-center md:py-0">
       <div ref={track} className="flex flex-col gap-10 px-5 md:flex-row md:items-center md:gap-14 md:px-10">
         <div className="shrink-0 md:w-[34vw]">
@@ -85,7 +96,7 @@ export default function Storefronts({ lang = "en" }: { lang?: Lang }) {
             target="_blank"
             rel="noopener noreferrer"
             data-cursor={t.cursor}
-            className="group block shrink-0 md:w-[46vw] lg:w-[40vw]"
+            className="sf-card group block shrink-0 md:w-[46vw] lg:w-[40vw]"
           >
             <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-line bg-bg-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}

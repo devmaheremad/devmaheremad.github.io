@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { getTheme, setTheme, syncThemeColor, useTheme } from "@/lib/theme";
+import { sfx } from "@/lib/sound";
 import type { Lang } from "@/lib/i18n";
 
 const LABEL = {
@@ -25,9 +26,12 @@ export default function ThemeToggle({ lang }: { lang: Lang }) {
     <button
       type="button"
       data-magnetic
+      data-sfx="none"
       onClick={(e) => {
         const b = e.currentTarget.getBoundingClientRect();
-        setTheme(getTheme() === "dark" ? "light" : "dark", { x: b.left + b.width / 2, y: b.top + b.height / 2 });
+        const next = getTheme() === "dark" ? "light" : "dark";
+        sfx(next === "light" ? "theme-light" : "theme-dark");
+        setTheme(next, { x: b.left + b.width / 2, y: b.top + b.height / 2 });
       }}
       aria-label={LABEL[lang][theme]}
       title={LABEL[lang][theme]}

@@ -38,7 +38,7 @@ export default function Experience({ items, lang = "en" }: { items: Job[]; lang?
   }, []);
 
   return (
-    <section ref={root} id="experience" className="px-5 py-[16vh] sm:px-10">
+    <section ref={root} id="experience" data-sound="experience" className="px-5 py-[16vh] sm:px-10">
       <p className="eyebrow mb-6">( 05 ) — {t.label}</p>
       <h2 className="mb-16 font-display text-[clamp(3rem,9vw,9rem)] font-extrabold leading-[0.85] tracking-tighter">
         {t.h2[0]}

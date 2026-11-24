@@ -110,7 +110,8 @@ export function PageHero({
 
 export function SectionHead({ index, label, title, aside }: { index: string; label: string; title: ReactNode; aside?: string }) {
   return (
-    <div className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    // data-sound: a bell as the section comes into view, its pitch from the section number (lib/sound.ts).
+    <div data-sound="section" data-sound-index={Number(index) || 0} className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
       <div>
         <p data-rv className="eyebrow mb-6">
           ( {index} ) — {label}

@@ -99,7 +99,7 @@ export default function Work({ groups, lang = "en" }: { groups: { title: string;
   }, [current]);
 
   return (
-    <section ref={root} id="projects" className="relative px-5 py-[16vh] sm:px-10">
+    <section ref={root} id="projects" data-sound="projects" className="relative px-5 py-[16vh] sm:px-10">
       <div className="mb-14 flex items-end justify-between gap-6">
         <div>
           <p className="eyebrow mb-6">( 03 ) — {t.label}</p>

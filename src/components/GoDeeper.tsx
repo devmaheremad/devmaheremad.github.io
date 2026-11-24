@@ -65,7 +65,7 @@ export default function GoDeeper({ lang = "en" }: { lang?: Lang }) {
   }, []);
 
   return (
-    <section ref={root} id="go-deeper" className="px-5 py-[16vh] sm:px-10">
+    <section ref={root} id="go-deeper" data-sound="go-deeper" className="px-5 py-[16vh] sm:px-10">
       <p className="eyebrow mb-6">( 06 ) — {t.label}</p>
       <h2 className="mb-16 font-display text-[clamp(3rem,9vw,9rem)] font-extrabold leading-[0.85] tracking-tighter">
         {t.h2[0]}

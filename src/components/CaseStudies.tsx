@@ -73,7 +73,7 @@ export default function CaseStudies({ items, lang = "en" }: { items: CaseStudy[]
   }, []);
 
   return (
-    <section ref={root} id="case-studies" className="px-5 py-[16vh] sm:px-10">
+    <section ref={root} id="case-studies" data-sound="case-studies" className="px-5 py-[16vh] sm:px-10">
       <p className="eyebrow mb-6">( 04 ) — {t.label}</p>
       <h2 className="mb-16 font-display text-[clamp(3rem,9vw,9rem)] font-extrabold leading-[0.85] tracking-tighter">
         {t.h2[0]}

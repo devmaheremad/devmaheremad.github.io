@@ -6,6 +6,7 @@ import { gsap, onReady, scrollToId, SplitText } from "@/lib/motion";
 import { profile } from "@/content/site";
 import type { Lang } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
+import { holdSound, sfx } from "@/lib/sound";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
@@ -89,8 +90,10 @@ export default function Hero({ lang = "en", intro }: { lang?: Lang; intro: strin
         ? Math.min(1, power.current + dt / HOLD_SECONDS)
         : Math.max(0, power.current - dt * 1.8);
       if (ring.current) ring.current.style.strokeDashoffset = String(126 * (1 - power.current));
+      holdSound(holding ? power.current : power.current * 0.6);
       if (holding && power.current >= 1 && !fired) {
         fired = true;
+        sfx("dive");
         holding = false;
         scrollToId("work");
       }

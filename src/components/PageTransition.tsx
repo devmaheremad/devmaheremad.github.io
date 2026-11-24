@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/motion";
+import { sfx } from "@/lib/sound";
 
 type LenisLike = { scrollTo: (t: number | string | HTMLElement, o?: object) => void; resize?: () => void };
 const lenis = () => (window as Window & { __lenis?: LenisLike }).__lenis;
@@ -51,6 +52,7 @@ export default function PageTransition() {
         return;
       }
       covering.current = true;
+      sfx("leave");
       if (label.current) {
         const text = a.dataset.transition ?? (a.children.length ? "" : a.textContent?.trim().slice(0, 40) ?? "");
         label.current.textContent = text;
@@ -90,6 +92,7 @@ export default function PageTransition() {
       if (location.hash) setTimeout(() => scrollToHash(location.hash), 500);
     });
     if (covering.current) {
+      window.setTimeout(() => sfx("land"), 200);
       gsap.timeline({ delay: 0.15, onComplete: () => void (covering.current = false) })
         .to(label.current, { yPercent: -110, duration: 0.4, ease: "expo.in" })
         .to(curtain.current, { yPercent: -100, duration: 0.85, ease: "expo.inOut" }, "-=0.1")

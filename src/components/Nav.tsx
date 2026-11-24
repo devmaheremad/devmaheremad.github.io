@@ -8,6 +8,8 @@ import { profile } from "@/content/site";
 import { companies } from "@/content/stories";
 import { counterpart, isArPath, localePath, UI, type Lang } from "@/lib/i18n";
 import ThemeToggle from "@/components/ThemeToggle";
+import SoundToggle from "@/components/SoundToggle";
+import { sfx } from "@/lib/sound";
 
 type NavLink = { href: string; label: string; lang?: Lang };
 
@@ -178,11 +180,18 @@ export default function Nav() {
               </li>
             ))}
             <li>
+              <SoundToggle lang={lang} />
+            </li>
+            <li>
               <ThemeToggle lang={lang} />
             </li>
             <li>
               <button
-                onClick={() => setOpen((o) => !o)}
+                onClick={() => {
+                  sfx(open ? "menu-close" : "menu-open");
+                  setOpen((o) => !o);
+                }}
+                data-sfx="none"
                 aria-expanded={open}
                 aria-controls="site-menu"
                 data-magnetic

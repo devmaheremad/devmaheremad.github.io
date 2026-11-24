@@ -8,6 +8,7 @@ import Preloader from "@/components/Preloader";
 import Nav from "@/components/Nav";
 import PageTransition from "@/components/PageTransition";
 import LangSync from "@/components/LangSync";
+import SoundFx from "@/components/SoundFx";
 import { profile } from "@/content/site";
 import { NAME_VARIANTS } from "@/lib/seo";
 import { THEME_BG, THEME_SCRIPT } from "@/lib/theme-script";
@@ -132,6 +133,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Nav />
         <PageTransition />
         <LangSync />
+        <SoundFx />
         <SmoothScroll>{children}</SmoothScroll>
         <div className="grain" aria-hidden />
       </body>

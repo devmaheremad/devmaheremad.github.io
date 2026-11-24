@@ -26,7 +26,7 @@ export default function Manifesto({ text, lang = "en" }: { text: string; lang?: 
   }, []);
 
   return (
-    <section ref={root} className="px-5 py-[22vh] sm:px-10">
+    <section ref={root} data-sound="manifesto" className="px-5 py-[22vh] sm:px-10">
       <p className="eyebrow mb-10">( 01 ) — {lang === "ar" ? "باختصار" : "In short"}</p>
       <p className="mf-text max-w-[22ch] font-display text-[clamp(2rem,5.4vw,5.6rem)] font-bold leading-[1.02] tracking-tight sm:max-w-[26ch]">
         {text.split(" ").map((w, i) => (
