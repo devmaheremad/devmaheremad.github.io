@@ -8,14 +8,15 @@ import { onVisibility, scrollAir, sfx, soundTheme, unlockSound, useSoundOn } fro
 const INTERACTIVE = "a[href], button, [role='button'], summary";
 
 // The site-wide sound layer: a tick on hover, a tap on click, air while scrolling, and a cue as each section with
-// data-sound="<cue>" comes into view. Does nothing until the visitor turns sound on (lib/sound.ts).
+// data-sound="<cue>" comes into view. Silent while the visitor has sound turned off (lib/sound.ts).
 export default function SoundFx() {
   const on = useSoundOn();
   const pathname = usePathname();
 
   useEffect(() => {
     if (!on) return;
-    // Audio may only start inside a gesture: the first click or key press after a reload starts it.
+    // Audio may only start inside a gesture: the first click, tap or key press starts it. Touch screens count the end
+    // of a tap (pointerup, touchend), not its start, so all of them are listened to.
     const unlock = () => unlockSound();
     let lastHover: Element | null = null;
     let lastHoverAt = 0;
@@ -47,12 +48,18 @@ export default function SoundFx() {
     const theme = new MutationObserver(() => soundTheme(document.documentElement.getAttribute("data-theme") === "light"));
     theme.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     document.addEventListener("pointerdown", down, true);
+    document.addEventListener("pointerup", unlock, true);
+    document.addEventListener("touchend", unlock, true);
+    document.addEventListener("click", unlock, true);
     document.addEventListener("keydown", unlock, true);
     document.addEventListener("pointerover", over, true);
     window.addEventListener("scroll", scroll, { passive: true });
     document.addEventListener("visibilitychange", vis);
     return () => {
       document.removeEventListener("pointerdown", down, true);
+      document.removeEventListener("pointerup", unlock, true);
+      document.removeEventListener("touchend", unlock, true);
+      document.removeEventListener("click", unlock, true);
       document.removeEventListener("keydown", unlock, true);
       document.removeEventListener("pointerover", over, true);
       window.removeEventListener("scroll", scroll);

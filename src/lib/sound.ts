@@ -3,8 +3,8 @@
 import { useSyncExternalStore } from "react";
 
 // Sound design, synthesized with the Web Audio API: no audio files, nothing to download, nothing to license.
-// Off by default; the switch in the bar turns it on (saved). Browsers only start audio after a click or key press,
-// so a returning visitor who left it on hears it from their first click.
+// On by default (owner, 2026-11-24); the switch in the bar turns it off, and that choice is saved. Browsers let no page
+// play sound before the visitor's first click, tap or key press, so the sound starts with that first gesture.
 //
 // One palette for the whole site: A minor pentatonic, soft sines and glassy FM bells in a little reverb, under a quiet
 // ambient pad (the site's own sound). Each homepage section has its own cue; scrolling adds a breath of air that
@@ -12,9 +12,9 @@ import { useSyncExternalStore } from "react";
 
 const KEY = "sound";
 const EVENT = "site:sound";
-// Cue level over the pad: cues sit clearly above the ambient (peaks near -16 dBFS), the pad stays near -30 dBFS.
+// Levels: cues peak near -18 dBFS; the ambient pad is soft and low, well under the cues.
 const LOUD = 2.6;
-const PAD = 0.03;
+const PAD = 0.012;
 const NOTES = [220, 261.63, 293.66, 329.63, 392, 440, 523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66, 1318.51];
 
 type Ctx = {
@@ -37,18 +37,10 @@ function read() {
   if (!loaded) {
     loaded = true;
     try {
-      enabled = localStorage.getItem(KEY) === "on";
+      enabled = localStorage.getItem(KEY) !== "off";
     } catch {}
   }
   return enabled;
-}
-
-export function hasSoundChoice() {
-  try {
-    return localStorage.getItem(KEY) !== null;
-  } catch {
-    return true;
-  }
 }
 
 function subscribe(cb: () => void) {
@@ -56,8 +48,19 @@ function subscribe(cb: () => void) {
   return () => window.removeEventListener(EVENT, cb);
 }
 
+// "off", "armed" (on, waiting for the first gesture) or "playing".
+export type SoundState = "off" | "armed" | "playing";
+function state(): SoundState {
+  if (!read()) return "off";
+  return c && c.ac.state === "running" ? "playing" : "armed";
+}
+
+export function useSoundState() {
+  return useSyncExternalStore(subscribe, state, () => "off" as SoundState);
+}
+
 export function useSoundOn() {
-  return useSyncExternalStore(subscribe, read, () => false);
+  return useSoundState() !== "off";
 }
 
 const isLight = () => document.documentElement.getAttribute("data-theme") === "light";
@@ -65,6 +68,7 @@ const isLight = () => document.documentElement.getAttribute("data-theme") === "l
 // ---------- graph ----------
 function build(): Ctx {
   const ac = new AudioContext({ latencyHint: "interactive" });
+  ac.onstatechange = () => window.dispatchEvent(new Event(EVENT));
   const comp = ac.createDynamicsCompressor();
   comp.threshold.value = -18;
   comp.ratio.value = 3;
@@ -108,32 +112,35 @@ function build(): Ctx {
   airSrc.connect(hp).connect(airFilter).connect(air).connect(bus);
   airSrc.start();
 
-  // Ambient pad: A, E, A, B (Aadd9) in soft triangles, detuned in pairs, under a slowly breathing low-pass.
+  // Ambient pad: light and low. Pure sines, no bass: A3, E4 and a faint B4, each a detuned pair that beats slowly,
+  // under a gently breathing low-pass, with a little of it sent to the reverb.
   const pad = ac.createGain();
   pad.gain.value = 0;
   const padFilter = ac.createBiquadFilter();
   padFilter.type = "lowpass";
-  padFilter.frequency.value = isLight() ? 950 : 560;
-  padFilter.Q.value = 0.6;
+  padFilter.frequency.value = isLight() ? 720 : 480;
+  padFilter.Q.value = 0.4;
   padFilter.connect(pad);
   pad.connect(bus);
-  pad.connect(verb);
-  for (const f of [110, 164.81, 220, 246.94]) {
-    for (const cents of [-6, 6]) {
+  const padVerb = ac.createGain();
+  padVerb.gain.value = 0.5;
+  pad.connect(padVerb).connect(verb);
+  for (const [f, level] of [[220, 0.3], [329.63, 0.22], [493.88, 0.1]]) {
+    for (const cents of [-4, 4]) {
       const o = ac.createOscillator();
-      o.type = "triangle";
+      o.type = "sine";
       o.frequency.value = f;
       o.detune.value = cents;
       const g = ac.createGain();
-      g.gain.value = f < 150 ? 0.3 : 0.18;
+      g.gain.value = level;
       o.connect(g).connect(padFilter);
       o.start();
     }
   }
   const lfo = ac.createOscillator();
-  lfo.frequency.value = 0.06;
+  lfo.frequency.value = 0.04;
   const depth = ac.createGain();
-  depth.gain.value = 180;
+  depth.gain.value = 110;
   lfo.connect(depth).connect(padFilter.frequency);
   lfo.start();
 
@@ -144,14 +151,14 @@ function running() {
   return enabled && c && c.ac.state === "running" ? c : null;
 }
 
-// Start (or resume) audio. Must run inside a click or key press the first time.
+// Start (or resume) audio. Must run inside a click, tap or key press the first time. The pad creeps in.
 export function unlockSound() {
   if (!read()) return;
   if (!c) c = build();
   if (c.ac.state !== "running") c.ac.resume().catch(() => {});
   const t = c.ac.currentTime;
   c.pad.gain.cancelScheduledValues(t);
-  c.pad.gain.setTargetAtTime(PAD, t, 1.2);
+  c.pad.gain.setTargetAtTime(PAD, t, 2.5);
 }
 
 export function setSound(on: boolean) {
@@ -184,7 +191,7 @@ export function onVisibility(visible: boolean) {
 // The pad brightens on paper and darkens at night.
 export function soundTheme(light: boolean) {
   if (!c) return;
-  c.padFilter.frequency.setTargetAtTime(light ? 950 : 560, c.ac.currentTime, 0.8);
+  c.padFilter.frequency.setTargetAtTime(light ? 720 : 480, c.ac.currentTime, 0.8);
 }
 
 // ---------- voices ----------
