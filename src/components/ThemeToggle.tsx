@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { followSystem, getTheme, setTheme, useTheme } from "@/lib/theme";
+import { getTheme, setTheme, syncThemeColor, useTheme } from "@/lib/theme";
 import type { Lang } from "@/lib/i18n";
 
 const LABEL = {
@@ -19,7 +19,7 @@ const RAYS = Array.from({ length: 8 }, (_, i) => {
 // so it is right on the first paint; only the label needs JavaScript.
 export default function ThemeToggle({ lang }: { lang: Lang }) {
   const theme = useTheme();
-  useEffect(() => followSystem(), []);
+  useEffect(() => syncThemeColor(), []);
 
   return (
     <button

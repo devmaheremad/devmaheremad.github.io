@@ -20,14 +20,6 @@ export function useTheme(): Theme {
   return useSyncExternalStore(subscribe, getTheme, () => "dark");
 }
 
-export function hasSavedTheme() {
-  try {
-    return localStorage.getItem(KEY) !== null;
-  } catch {
-    return false;
-  }
-}
-
 function apply(theme: Theme, save: boolean) {
   document.documentElement.setAttribute("data-theme", theme);
   document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute("content", THEME_BG[theme]));
@@ -38,13 +30,9 @@ function apply(theme: Theme, save: boolean) {
   }
 }
 
-// Follow the system setting while the visitor has not picked a theme.
-export function followSystem() {
-  const mq = window.matchMedia("(prefers-color-scheme: light)");
-  const sync = () => !hasSavedTheme() && apply(mq.matches ? "light" : "dark", false);
-  mq.addEventListener("change", sync);
+// The browser bar takes the colour of the theme the page opened in (the server HTML says dark).
+export function syncThemeColor() {
   apply(getTheme(), false);
-  return () => mq.removeEventListener("change", sync);
 }
 
 type ViewTransitionDoc = Document & {

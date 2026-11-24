@@ -111,13 +111,8 @@ const structuredData = {
   ],
 };
 
-// The browser bar follows the system theme here, and the visitor's choice once the page runs (lib/theme.ts).
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: THEME_BG.light },
-    { media: "(prefers-color-scheme: dark)", color: THEME_BG.dark },
-  ],
-};
+// Dark is the default theme; the browser bar turns light only for a visitor who picked light (lib/theme.ts).
+export const viewport: Viewport = { themeColor: THEME_BG.dark };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
