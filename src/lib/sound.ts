@@ -18,6 +18,8 @@ const EVENT = "site:sound";
 // audible"): a peak near 0.004, about -48 dBFS, some 30 dB under the cues.
 const LOUD = 2.6;
 const PAD = 0.0042;
+// Scroll air at its fastest. A fifth of the level before (owner, 2026-11-25: "much, much lower"), about 14 dB down.
+const AIR = 0.017;
 const NOTES = [220, 261.63, 293.66, 329.63, 392, 440, 523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66, 1318.51];
 
 type Ctx = {
@@ -402,7 +404,7 @@ export function sfx(name: string, arg?: number) {
 }
 
 // Scroll: a soft breath of air that follows the speed (pixels per millisecond), eases in and fades when the page stops.
-// About a third of its first level, and darker: the low-pass opens from 300 Hz to 1.1 kHz at most.
+// Very quiet (AIR) and dark: the low-pass opens from 300 Hz to 1.1 kHz at most.
 export function scrollAir(speed: number) {
   const x = running();
   if (!x) return;
@@ -412,7 +414,7 @@ export function scrollAir(speed: number) {
   const g = x.air.gain as AudioParam & { cancelAndHoldAtTime?: (t: number) => AudioParam };
   if (g.cancelAndHoldAtTime) g.cancelAndHoldAtTime(t);
   else g.cancelScheduledValues(t);
-  g.setTargetAtTime(Math.pow(v, 1.2) * 0.085, t, 0.1);
+  g.setTargetAtTime(Math.pow(v, 1.2) * AIR, t, 0.1);
   x.airFilter.frequency.setTargetAtTime(300 + v * 800, t, 0.2);
   g.setTargetAtTime(0, t + 0.14, 0.25);
 }
